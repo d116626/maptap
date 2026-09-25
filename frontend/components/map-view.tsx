@@ -36,6 +36,15 @@ import { buildUnifiedMapLibreStyle } from "@/lib/unified-map-style";
 import { UnifiedGamePanel } from "./unified-game-panel";
 import { BottomControlsDock } from "./bottom-controls-dock";
 import { CitiesCatalogDialog } from "./cities-catalog-dialog";
+import { TrophyDashboardDialog } from "./trophy-dashboard-dialog";
+import {
+  getStoredGuessHistory,
+  saveGuessToHistory,
+  clearStoredGuessHistory,
+  calculateAverageScore,
+  getPlayedCityIds,
+  type GuessHistoryItem,
+} from "@/lib/game-storage";
 import { Crosshair, MapPin } from "lucide-react";
 import { REGION_TABS, ALL_REGION_OPTIONS } from "@/data/countries-catalog";
 
@@ -99,6 +108,7 @@ interface SelectTargetParams {
   statesGeoJSON: FeatureCollection | null;
   countriesGeoJSON: FeatureCollection | null;
   currentTargetId?: string;
+  playedCityIds?: Set<string>;
 }
 
 function selectTargetEntity({
@@ -108,6 +118,7 @@ function selectTargetEntity({
   statesGeoJSON,
   countriesGeoJSON,
   currentTargetId,
+  playedCityIds,
 }: SelectTargetParams): TargetEntity | null {
   if (forcedCity) {
     return {
@@ -249,7 +260,20 @@ function selectTargetEntity({
       const filtered = currentTargetId
         ? scoped.filter((c) => c.id !== currentTargetId)
         : scoped;
-      const list = filtered.length > 0 ? filtered : scoped;
+
+      // Filter out cities already played from localStorage history to prevent repetition
+      const unplayed = playedCityIds
+        ? filtered.filter((c) => !playedCityIds.has(c.id))
+        : filtered;
+
+      // If all cities in the scoped pool have been played, recycle pool cleanly
+      const list =
+        unplayed.length > 0
+          ? unplayed
+          : filtered.length > 0
+          ? filtered
+          : scoped;
+
       const c = list[Math.floor(Math.random() * list.length)];
 
       return {
@@ -317,9 +341,22 @@ export function MapView() {
 
   const [target, setTarget] = useState<TargetEntity | null>(null);
   const [guessResult, setGuessResult] = useState<GuessResult | null>(null);
-  const [score, setScore] = useState<number>(0);
+  const [guessHistory, setGuessHistory] = useState<GuessHistoryItem[]>(() =>
+    getStoredGuessHistory()
+  );
+  const [dashboardOpen, setDashboardOpen] = useState(false);
   const [streak, setStreak] = useState<number>(0);
   const [catalogOpen, setCatalogOpen] = useState(false);
+
+  // Calculate average score across all played rounds
+  const averageScore = useMemo(() => {
+    return calculateAverageScore(guessHistory);
+  }, [guessHistory]);
+
+  // Set of city IDs already played in history to avoid repetition
+  const playedCityIds = useMemo(() => {
+    return getPlayedCityIds(guessHistory);
+  }, [guessHistory]);
 
   const [viewState, setViewState] = useState({
     longitude: -51.9253,
@@ -397,6 +434,9 @@ export function MapView() {
           setStatesGeoJSON(sData);
           setCountriesGeoJSON(cntData);
 
+          const storedHistory = getStoredGuessHistory();
+          const initialPlayedIds = getPlayedCityIds(storedHistory);
+
           const initialTarget = selectTargetEntity({
             settings: {
               mode: "cities",
@@ -410,6 +450,7 @@ export function MapView() {
             cities: cData,
             statesGeoJSON: sData,
             countriesGeoJSON: cntData,
+            playedCityIds: initialPlayedIds,
           });
 
           if (initialTarget) {
@@ -451,12 +492,13 @@ export function MapView() {
         statesGeoJSON,
         countriesGeoJSON,
         currentTargetId: target?.id,
+        playedCityIds,
       });
       if (next) {
         setTarget(next);
       }
     },
-    [cities, countriesGeoJSON, statesGeoJSON, settings, target?.id]
+    [cities, countriesGeoJSON, statesGeoJSON, settings, target?.id, playedCityIds]
   );
 
   // Keyboard shortcut: Space or Enter skips or advances to next target
@@ -813,11 +855,42 @@ export function MapView() {
       };
 
       setGuessResult(result);
-      setScore((prev) => prev + roundScore);
+
+      // Persist guess into localStorage history & update state
+      const historyItem: GuessHistoryItem = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        targetId: target.id,
+        targetName: target.name,
+        targetDetails:
+          target.displayName ||
+          (target.state
+            ? `${target.name}, ${target.state}, ${target.country}`
+            : `${target.name}, ${target.country}`),
+        targetPopulation: target.population,
+        targetType: target.type,
+        targetCoords: [target.lng, target.lat],
+        guessCoords: [guessLng, guessLat],
+        clickedRegionName: clickedRegion?.name,
+        clickedRegionCountry: clickedRegion?.countryName,
+        distanceKm: Math.round(distance),
+        score: roundScore,
+        isCorrectRegion: isDirectHit,
+        timestamp: Date.now(),
+      };
+
+      const updatedHistory = saveGuessToHistory(historyItem);
+      setGuessHistory(updatedHistory);
       setStreak((prev) => (result.isCorrectRegion ? prev + 1 : 0));
     },
     [target, guessResult, detectClickedRegion, statesGeoJSON]
   );
+
+  // Clear history and reset average score
+  const handleClearHistory = useCallback(() => {
+    clearStoredGuessHistory();
+    setGuessHistory([]);
+    setStreak(0);
+  }, []);
 
   // Stable MapLibre style specification for raster tiles and labels
   const mapStyleSpec = useMemo(() => {
@@ -830,7 +903,7 @@ export function MapView() {
       <UnifiedGamePanel
         target={target}
         settings={settings}
-        score={score}
+        score={averageScore}
         streak={streak}
         guessResult={guessResult}
         cities={cities}
@@ -838,6 +911,7 @@ export function MapView() {
         onUpdateSettings={handleUpdateSettings}
         onFlyToRegion={handleFlyToRegion}
         onOpenCatalog={() => setCatalogOpen(true)}
+        onOpenStats={() => setDashboardOpen(true)}
       />
 
       {/* Main MapLibre Canvas */}
@@ -852,6 +926,57 @@ export function MapView() {
         style={{ width: "100%", height: "100%" }}
         cursor={guessResult ? "grab" : "crosshair"}
       >
+        {/* Vector Borders Overlay fallback when Mapbox token is not available */}
+        {settings.showLabels && !process.env.NEXT_PUBLIC_MAPBOX_TOKEN && countriesGeoJSON && (
+          <Source id="overlay-countries-source" type="geojson" data={countriesGeoJSON}>
+            <Layer
+              id="overlay-countries-border"
+              type="line"
+              paint={{
+                "line-color": "#ffffff",
+                "line-width": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  1,
+                  0.75,
+                  5,
+                  1.4,
+                  10,
+                  2.0,
+                ],
+                "line-opacity": 0.65,
+              }}
+            />
+          </Source>
+        )}
+
+        {settings.showLabels && !process.env.NEXT_PUBLIC_MAPBOX_TOKEN && statesGeoJSON && (
+          <Source id="overlay-states-source" type="geojson" data={statesGeoJSON}>
+            <Layer
+              id="overlay-states-border"
+              type="line"
+              minzoom={3}
+              paint={{
+                "line-color": "#cbd5e1",
+                "line-width": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  3,
+                  0.5,
+                  6,
+                  1.1,
+                  11,
+                  1.8,
+                ],
+                "line-opacity": 0.5,
+                "line-dasharray": [3, 2],
+              }}
+            />
+          </Source>
+        )}
+
         {/* 1. Highlight da Região Alvo (Outline Nítido + Preenchimento Quase 100% Transparente) */}
         {guessResult && targetRegionGeoJSON && (
           <Source id="target-region-source" type="geojson" data={targetRegionGeoJSON}>
@@ -989,6 +1114,16 @@ export function MapView() {
             mapRef.current.flyTo({ center: [city.lng, city.lat], zoom: 5 });
           }
         }}
+      />
+
+      {/* Trophy Stats & Guess History Dashboard Dialog */}
+      <TrophyDashboardDialog
+        open={dashboardOpen}
+        onOpenChange={setDashboardOpen}
+        history={guessHistory}
+        averageScore={averageScore}
+        streak={streak}
+        onClearHistory={handleClearHistory}
       />
     </div>
   );

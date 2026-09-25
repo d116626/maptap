@@ -101,14 +101,15 @@ export function BottomControlsDock({
 
           <div className="h-5 w-px bg-border/60 shrink-0" />
 
-          {/* 4. Skip or Next Round (Fixed: w-10 h-10) */}
+          {/* 4. Skip or Next Round (2x larger than 40px buttons -> 84px with label) */}
           {hasGuessed ? (
             <Button
               onClick={onNextTarget}
               size="sm"
-              className="h-10 w-10 p-0 rounded-xl bg-primary text-primary-foreground shadow-md animate-pulse shrink-0 flex items-center justify-center"
+              className="h-10 min-w-[84px] px-3.5 rounded-xl bg-primary text-primary-foreground shadow-md animate-pulse shrink-0 flex items-center justify-center gap-1.5 font-bold text-xs transition-all hover:brightness-110 active:scale-95"
               title="Next Round (Space / Enter)"
             >
+              <span>Next</span>
               <ArrowRight className="size-4" />
             </Button>
           ) : (
@@ -116,9 +117,10 @@ export function BottomControlsDock({
               variant="ghost"
               size="sm"
               onClick={onSkipTarget}
-              className="h-10 w-10 p-0 rounded-xl text-muted-foreground hover:text-foreground shrink-0 flex items-center justify-center"
-              title="Skip Round"
+              className="h-10 min-w-[84px] px-3.5 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/60 shrink-0 flex items-center justify-center gap-1.5 font-bold text-xs transition-all active:scale-95"
+              title="Skip Round (Space / Enter)"
             >
+              <span>Skip</span>
               <SkipForward className="size-4" />
             </Button>
           )}

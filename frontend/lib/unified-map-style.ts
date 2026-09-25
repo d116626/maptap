@@ -1,5 +1,6 @@
-import type { StyleSpecification } from "maplibre-gl";
+import type { LayerSpecification, StyleSpecification } from "maplibre-gl";
 import type { BaseMapId, BaseMapOption, TrainingSettings } from "@/types/map";
+import mapboxOverlayLayers from "./mapbox-overlay-layers.json";
 
 export const BASEMAP_OPTIONS: BaseMapOption[] = [
   {
@@ -172,29 +173,49 @@ export function buildUnifiedMapLibreStyle(
     });
   }
 
-  // 2. Overlays - Labels & Places (City names, states, countries)
-  sources["overlay-source-labels"] = {
-    type: "raster",
-    tiles: [
-      "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-    ],
-    tileSize: 256,
-    maxzoom: 18,
-    attribution: "Labels &copy; Esri",
-  };
-  layers.push({
-    id: "overlay-layer-labels",
-    type: "raster",
-    source: "overlay-source-labels",
-    minzoom: 0,
-    maxzoom: 18,
-    layout: {
-      visibility: settings.showLabels ? "visible" : "none",
-    },
-    paint: {
-      "raster-opacity": 0.95,
-    },
-  });
+  // 2. Overlays - Full Standard Mapbox Streets Vector Layers (or Esri Reference fallback)
+  if (mapboxToken) {
+    sources["composite"] = {
+      type: "vector",
+      url: `https://api.mapbox.com/v4/mapbox.mapbox-streets-v8.json?secure&access_token=${mapboxToken}`,
+    };
+
+    const overlayVisibility = settings.showLabels ? "visible" : "none";
+    for (const rawLayer of mapboxOverlayLayers) {
+      const layer = rawLayer as LayerSpecification;
+      layers.push({
+        ...layer,
+        layout: {
+          ...(layer.layout || {}),
+          visibility: overlayVisibility,
+        },
+      } as LayerSpecification);
+    }
+  } else {
+    // Fallback: Esri Reference Overlay (100% free, no API key required, no watermarks)
+    sources["overlay-source-labels"] = {
+      type: "raster",
+      tiles: [
+        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+      ],
+      tileSize: 256,
+      maxzoom: 19,
+      attribution: "Tiles &copy; Esri, DeLorme, HERE",
+    };
+    layers.push({
+      id: "overlay-layer-labels",
+      type: "raster",
+      source: "overlay-source-labels",
+      minzoom: 0,
+      maxzoom: 19,
+      layout: {
+        visibility: settings.showLabels ? "visible" : "none",
+      },
+      paint: {
+        "raster-opacity": 0.95,
+      },
+    });
+  }
 
   // 3. Terrain 3D Elevation (Raster DEM)
   sources["terrain-dem-source"] = mapboxToken
@@ -219,6 +240,12 @@ export function buildUnifiedMapLibreStyle(
 
   return {
     version: 8,
+    sprite: mapboxToken
+      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/sprite?access_token=${mapboxToken}`
+      : undefined,
+    glyphs: mapboxToken
+      ? `https://api.mapbox.com/fonts/v1/mapbox/{fontstack}/{range}.pbf?access_token=${mapboxToken}`
+      : "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
     sources,
     layers,
     terrain: settings.terrain3D

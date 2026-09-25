@@ -5,7 +5,7 @@ export const ESRI_BORDERS_OVERLAY_TILES = [
 ];
 
 export const ESRI_LABELS_OVERLAY_TILES = [
-  "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+  "https://a.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}@2x.png",
 ];
 
 export const BASEMAP_STYLES: Record<BaseMapId, BaseMapOption> = {

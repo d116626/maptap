@@ -30,6 +30,7 @@ interface UnifiedGamePanelProps {
   onUpdateSettings: (newVals: Partial<TrainingSettings>) => void;
   onFlyToRegion?: (center: [number, number], zoom: number) => void;
   onOpenCatalog: () => void;
+  onOpenStats?: () => void;
 }
 
 export function UnifiedGamePanel({
@@ -43,6 +44,7 @@ export function UnifiedGamePanel({
   onUpdateSettings,
   onFlyToRegion,
   onOpenCatalog,
+  onOpenStats,
 }: UnifiedGamePanelProps) {
   const isCitiesMode = settings.mode === "cities";
 
@@ -125,12 +127,18 @@ export function UnifiedGamePanel({
               </Button>
             </div>
 
-            {/* Score & Streak */}
+            {/* Score & Streak (Click Trophy for Dashboard & History) */}
             <div className="flex items-center gap-1.5 px-0.5 shrink-0">
-              <div className="flex items-center gap-1 text-xs font-bold text-foreground">
-                <Trophy className="size-3.5 text-amber-500" />
-                <span>{score.toLocaleString("en-US")}</span>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onOpenStats}
+                className="h-7 px-2 rounded-lg flex items-center gap-1 text-xs font-bold text-foreground hover:bg-muted/60 transition-colors"
+                title="Ver Dashboard de Desempenho e Histórico de Palpites"
+              >
+                <Trophy className="size-3.5 text-amber-500 shrink-0" />
+                <span>{score.toLocaleString("pt-BR")}</span>
+              </Button>
               {streak > 1 && (
                 <div className="flex items-center gap-0.5 text-xs font-bold text-orange-500 animate-bounce">
                   <Flame className="size-3.5 fill-orange-500" />
