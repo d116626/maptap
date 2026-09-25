@@ -27,6 +27,7 @@ import {
   calculateDistanceKm,
   calculateFeatureCenter,
   calculateScore,
+  createLineStringGeoJSON,
   filterCitiesByScope,
   isPointInsideGeometry,
 } from "@/lib/geo-utils";
@@ -53,20 +54,6 @@ import { REGION_TABS, ALL_REGION_OPTIONS } from "@/data/countries-catalog";
 if (typeof window !== "undefined") {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   maplibregl.setWorkerUrl(`${basePath}/maplibre/maplibre-gl-worker.mjs`);
-}
-
-function createLineStringGeoJSON(
-  start: [number, number],
-  end: [number, number]
-): Feature {
-  return {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "LineString",
-      coordinates: [start, end],
-    },
-  };
 }
 
 function filterCitiesByPool(
@@ -943,57 +930,6 @@ export function MapView() {
         style={{ width: "100%", height: "100%" }}
         cursor={guessResult ? "grab" : "crosshair"}
       >
-        {/* Vector Borders Overlay fallback when Mapbox token is not available */}
-        {settings.showLabels && !process.env.NEXT_PUBLIC_MAPBOX_TOKEN && countriesGeoJSON && (
-          <Source id="overlay-countries-source" type="geojson" data={countriesGeoJSON}>
-            <Layer
-              id="overlay-countries-border"
-              type="line"
-              paint={{
-                "line-color": "#ffffff",
-                "line-width": [
-                  "interpolate",
-                  ["linear"],
-                  ["zoom"],
-                  1,
-                  0.75,
-                  5,
-                  1.4,
-                  10,
-                  2.0,
-                ],
-                "line-opacity": 0.65,
-              }}
-            />
-          </Source>
-        )}
-
-        {settings.showLabels && !process.env.NEXT_PUBLIC_MAPBOX_TOKEN && statesGeoJSON && (
-          <Source id="overlay-states-source" type="geojson" data={statesGeoJSON}>
-            <Layer
-              id="overlay-states-border"
-              type="line"
-              minzoom={3}
-              paint={{
-                "line-color": "#cbd5e1",
-                "line-width": [
-                  "interpolate",
-                  ["linear"],
-                  ["zoom"],
-                  3,
-                  0.5,
-                  6,
-                  1.1,
-                  11,
-                  1.8,
-                ],
-                "line-opacity": 0.5,
-                "line-dasharray": [3, 2],
-              }}
-            />
-          </Source>
-        )}
-
         {/* 1. Highlight da Região Alvo (Outline Nítido + Preenchimento Quase 100% Transparente) */}
         {guessResult && targetRegionGeoJSON && (
           <Source id="target-region-source" type="geojson" data={targetRegionGeoJSON}>
