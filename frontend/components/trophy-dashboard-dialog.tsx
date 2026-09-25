@@ -89,7 +89,7 @@ export function TrophyDashboardDialog({
         onOpenChange(val);
       }}
     >
-      <DialogContent className="max-h-[85vh] sm:max-w-2xl flex flex-col p-4 sm:p-6 overflow-hidden">
+      <DialogContent className="max-h-[85vh] sm:max-w-2xl flex flex-col p-4 sm:p-6 overflow-hidden border border-white/10 bg-slate-950/95 backdrop-blur-2xl shadow-2xl">
         <DialogHeader className="pb-2 border-b border-border/60">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

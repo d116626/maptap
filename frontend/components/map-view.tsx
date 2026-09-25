@@ -6,7 +6,6 @@ import Map, {
   Marker,
   Source,
   type MapRef,
-  type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 import * as maplibregl from "maplibre-gl";
 import type { MapLayerMouseEvent } from "maplibre-gl";
@@ -358,11 +357,14 @@ export function MapView() {
     return getPlayedCityIds(guessHistory);
   }, [guessHistory]);
 
-  const [viewState, setViewState] = useState({
-    longitude: -51.9253,
-    latitude: -14.235,
-    zoom: 3.5,
-  });
+  const initialViewState = useMemo(
+    () => ({
+      longitude: -51.9253,
+      latitude: -14.235,
+      zoom: 3.5,
+    }),
+    []
+  );
 
   // Sound sync
   useEffect(() => {
@@ -545,6 +547,17 @@ export function MapView() {
     []
   );
 
+  const handleSelectCatalogCity = useCallback(
+    (city: CityItem) => {
+      pickNewTarget(city);
+      setCatalogOpen(false);
+      if (mapRef.current) {
+        mapRef.current.flyTo({ center: [city.lng, city.lat], zoom: 5 });
+      }
+    },
+    [pickNewTarget]
+  );
+
   // Find which region (state or country) a coordinate belongs to
   const detectClickedRegion = useCallback(
     (
@@ -712,6 +725,13 @@ export function MapView() {
       return null;
     }
 
+    if (guessResult.clickedFeature) {
+      return {
+        type: "FeatureCollection",
+        features: [guessResult.clickedFeature],
+      };
+    }
+
     if (guessResult.clickedRegionType === "state" && statesGeoJSON) {
       const match = statesGeoJSON.features.find(
         (f) =>
@@ -852,6 +872,7 @@ export function MapView() {
         targetRegionName: target.name,
         targetRegionCode: target.state_code || target.country_code,
         isCorrectRegion: isDirectHit,
+        clickedFeature: clickedRegion?.feature,
       };
 
       setGuessResult(result);
@@ -914,12 +935,11 @@ export function MapView() {
         onOpenStats={() => setDashboardOpen(true)}
       />
 
-      {/* Main MapLibre Canvas */}
+      {/* Main MapLibre Canvas (Native 60+ FPS via initialViewState) */}
       <Map
         ref={mapRef}
-        {...viewState}
+        initialViewState={initialViewState}
         maxPitch={85}
-        onMove={(evt: ViewStateChangeEvent) => setViewState(evt.viewState)}
         onClick={handleMapClick}
         mapLib={maplibregl}
         mapStyle={mapStyleSpec}
@@ -1102,19 +1122,15 @@ export function MapView() {
         hasGuessed={guessResult !== null}
       />
 
-      {/* Cities Catalog Dialog */}
-      <CitiesCatalogDialog
-        open={catalogOpen}
-        onOpenChange={setCatalogOpen}
-        cities={eligibleCities}
-        onSelectCity={(city) => {
-          pickNewTarget(city);
-          setCatalogOpen(false);
-          if (mapRef.current) {
-            mapRef.current.flyTo({ center: [city.lng, city.lat], zoom: 5 });
-          }
-        }}
-      />
+      {/* Cities Catalog Dialog (lazy mounted only when open) */}
+      {catalogOpen && (
+        <CitiesCatalogDialog
+          open={catalogOpen}
+          onOpenChange={setCatalogOpen}
+          cities={eligibleCities}
+          onSelectCity={handleSelectCatalogCity}
+        />
+      )}
 
       {/* Trophy Stats & Guess History Dashboard Dialog */}
       <TrophyDashboardDialog

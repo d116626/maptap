@@ -87,36 +87,39 @@ export function CityPoolSelector({
     CITY_POOL_OPTIONS.find((opt) => opt.id === normalizedPoolId) ||
     CITY_POOL_OPTIONS[0];
 
-  // Calculate live counts for each pool option in the current scope
+  // Calculate live counts for each pool option in the current scope (ultra-fast single pass)
   const poolCounts = useMemo<Record<CityPoolMode, number>>(() => {
-    if (!cities || cities.length === 0) {
-      return {
-        all: 0,
-        country_capitals: 0,
-        state_capitals: 0,
-        capitals: 0,
-        "1M": 0,
-        "100k": 0,
-        maptap: 0,
-      };
-    }
+    const counts: Record<CityPoolMode, number> = {
+      all: 0,
+      country_capitals: 0,
+      state_capitals: 0,
+      capitals: 0,
+      "1M": 0,
+      "100k": 0,
+      maptap: 0,
+    };
+    if (!cities || cities.length === 0) return counts;
 
     let scoped = filterCitiesByScope(cities, scopeCountry);
     if (scoped.length === 0 && scopeCountry !== "ALL") {
       scoped = cities;
     }
 
-    const base = maptapOnly ? scoped.filter((c) => c.is_maptap_base) : scoped;
+    for (let i = 0; i < scoped.length; i++) {
+      const c = scoped[i];
+      if (c.is_maptap_base) counts.maptap++;
+      if (maptapOnly && !c.is_maptap_base) continue;
 
-    return {
-      all: base.length,
-      country_capitals: base.filter((c) => Boolean(c.is_country_capital)).length,
-      state_capitals: base.filter((c) => Boolean(c.is_state_capital)).length,
-      capitals: base.filter((c) => Boolean(c.is_capital)).length,
-      "1M": base.filter((c) => (c.population || 0) >= 1_000_000).length,
-      "100k": base.filter((c) => (c.population || 0) >= 100_000).length,
-      maptap: scoped.filter((c) => c.is_maptap_base).length,
-    };
+      counts.all++;
+      if (c.is_country_capital) counts.country_capitals++;
+      if (c.is_state_capital) counts.state_capitals++;
+      if (c.is_capital) counts.capitals++;
+      const pop = c.population || 0;
+      if (pop >= 1_000_000) counts["1M"]++;
+      if (pop >= 100_000) counts["100k"]++;
+    }
+
+    return counts;
   }, [cities, scopeCountry, maptapOnly]);
 
   useEffect(() => {
@@ -170,7 +173,7 @@ export function CityPoolSelector({
       </Button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full mt-1.5 z-50 w-64 rounded-2xl border border-border/80 bg-background/98 p-1.5 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-1">
+        <div className="absolute left-0 top-full mt-1.5 z-50 w-64 rounded-2xl border border-white/10 bg-slate-950/95 p-1.5 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-1">
           {/* MapTap Base Toggle Header */}
           {onToggleMaptapOnly && (
             <div className="px-2 pt-1 pb-2 border-b border-border/60">

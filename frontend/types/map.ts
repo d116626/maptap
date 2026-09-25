@@ -1,5 +1,7 @@
 import type { StyleSpecification } from "maplibre-gl";
 
+import type { Feature } from "geojson";
+
 export type BaseMapId =
   | "esri_satellite"
   | "nasa_night"
@@ -116,6 +118,7 @@ export interface GuessResult {
   targetRegionName?: string;
   targetRegionCode?: string;
   isCorrectRegion: boolean;
+  clickedFeature?: Feature;
 }
 
 export interface StatePolygonProperties {

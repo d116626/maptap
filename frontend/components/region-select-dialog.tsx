@@ -277,7 +277,7 @@ export function RegionSelector({
 
       {/* Dropdown Popover with Continents & Perfectly Aligned Badges */}
       {isOpen && (
-        <div className="absolute left-0 top-full mt-1.5 z-50 w-84 sm:w-96 rounded-2xl border border-border/80 bg-background/98 p-2.5 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2">
+        <div className="absolute left-0 top-full mt-1.5 z-50 w-84 sm:w-96 rounded-2xl border border-white/10 bg-slate-950/95 p-2.5 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2">
           {/* Continent Tabs */}
           <div className="flex flex-wrap gap-1 p-1 rounded-xl bg-muted/40 border border-border/50">
             {REGION_TABS.map((tab) => {

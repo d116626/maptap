@@ -63,7 +63,7 @@ export function UnifiedGamePanel({
 
   return (
     <div className="pointer-events-none fixed top-3 left-3 right-3 z-20 flex justify-center max-w-xl mx-auto">
-      <div className="pointer-events-auto w-full rounded-2xl border border-white/20 bg-background/95 p-2.5 sm:p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-2 select-none transition-all duration-200">
+      <div className="pointer-events-auto w-full rounded-2xl border border-white/10 bg-slate-950/85 p-2.5 sm:p-3 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.8)] backdrop-blur-2xl flex flex-col gap-2 select-none transition-all duration-200">
         {/* 1. Top Bar: Region Selector, City Pool Dropdown, Mode, Score, Audio & Search */}
         <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-border/50">
           {/* Left: Region & City Pool Selectors */}

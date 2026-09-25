@@ -39,7 +39,7 @@ export function BottomControlsDock({
     <>
       {/* Floating Bottom Dock Bar (Tamanho Estritamente Fixo e Estável) */}
       <div className="pointer-events-none fixed bottom-4 left-0 right-0 z-20 flex justify-center px-3 safe-area-bottom">
-        <div className="pointer-events-auto flex items-center gap-2 rounded-2xl border border-white/20 bg-background/90 p-1.5 shadow-2xl backdrop-blur-xl">
+        <div className="pointer-events-auto flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-950/85 p-1.5 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
           {/* 1. Base Map Imagery (Fixed: w-10 h-10) */}
           <Button
             variant="ghost"
@@ -129,8 +129,8 @@ export function BottomControlsDock({
 
       {/* Quick Basemap Selection Overlay Dialog */}
       {styleSelectorOpen && (
-        <div className="fixed inset-0 z-30 flex items-end sm:items-center justify-center p-3 bg-black/50 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-background p-4 shadow-2xl safe-area-bottom">
+        <div className="fixed inset-0 z-30 flex items-end sm:items-center justify-center p-3 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-2xl safe-area-bottom">
             <div className="flex items-center justify-between pb-3 border-b border-border mb-3">
               <div className="flex items-center gap-2">
                 <Compass className="size-4 text-primary" />
