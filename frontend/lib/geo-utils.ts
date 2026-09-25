@@ -26,12 +26,29 @@ function toRad(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
 
-export function calculateScore(distanceKm: number, decayConstant = 600): number {
-  if (distanceKm <= 5) return 1000;
-  return Math.max(
-    0,
-    Math.min(1000, Math.round(1000 * Math.exp(-distanceKm / decayConstant)))
-  );
+export const EARTH_MAX_DISTANCE_KM = 20015;
+
+/**
+ * Calculates score (0 - 1000) using MapTap / GeoGuessr normalized exponential decay.
+ * - Perfect score (1000) within tolerance radius (15 km).
+ * - Smooth, rewarding decay across continental and intercontinental distances.
+ * - Reaches 0 only if you click near the exact antipode (other side of the world, ~20,015 km).
+ */
+export function calculateScore(
+  distanceKm: number,
+  maxDistanceKm = EARTH_MAX_DISTANCE_KM,
+  kFactor = 4.0,
+  toleranceKm = 15
+): number {
+  if (distanceKm <= toleranceKm) return 1000;
+  if (distanceKm >= maxDistanceKm) return 0;
+
+  const k = kFactor / maxDistanceKm;
+  const eD = Math.exp(-k * distanceKm);
+  const eMax = Math.exp(-k * maxDistanceKm);
+  const normalized = (eD - eMax) / (1 - eMax);
+
+  return Math.max(0, Math.min(1000, Math.round(1000 * normalized)));
 }
 
 import type { Geometry } from "geojson";

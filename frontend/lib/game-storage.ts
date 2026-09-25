@@ -1,5 +1,7 @@
 "use client";
 
+import type { TrainingSettings } from "@/types/map";
+
 export interface GuessHistoryItem {
   id: string;
   targetId: string;
@@ -88,4 +90,48 @@ export function getPlayedCityIds(history: GuessHistoryItem[]): Set<string> {
     }
   }
   return ids;
+}
+
+export const DEFAULT_TRAINING_SETTINGS: TrainingSettings = {
+  mode: "cities",
+  baseMap: "esri_satellite",
+  showLabels: false,
+  soundEnabled: true,
+  scopeCountry: "ALL", // Whole World default
+  cityPool: "all",
+  maptapOnly: true, // MapTap Base active by default
+  terrain3D: false,
+};
+
+const SETTINGS_STORAGE_KEY = "maptap_training_settings_v1";
+
+/**
+ * Retrieves saved training settings from localStorage or defaults to Whole World + MapTap base
+ */
+export function getStoredTrainingSettings(): TrainingSettings {
+  if (typeof window === "undefined") return DEFAULT_TRAINING_SETTINGS;
+  try {
+    const raw = window.localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (!raw) return DEFAULT_TRAINING_SETTINGS;
+    const parsed = JSON.parse(raw);
+    return {
+      ...DEFAULT_TRAINING_SETTINGS,
+      ...parsed,
+    };
+  } catch (err) {
+    console.error("Failed to read settings from localStorage:", err);
+    return DEFAULT_TRAINING_SETTINGS;
+  }
+}
+
+/**
+ * Persists training settings to localStorage
+ */
+export function saveStoredTrainingSettings(settings: TrainingSettings): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  } catch (err) {
+    console.error("Failed to save settings to localStorage:", err);
+  }
 }

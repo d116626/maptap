@@ -42,6 +42,8 @@ import {
   clearStoredGuessHistory,
   calculateAverageScore,
   getPlayedCityIds,
+  getStoredTrainingSettings,
+  saveStoredTrainingSettings,
   type GuessHistoryItem,
 } from "@/lib/game-storage";
 import { Crosshair, MapPin } from "lucide-react";
@@ -319,17 +321,10 @@ function selectTargetEntity({
 export function MapView() {
   const mapRef = useRef<MapRef | null>(null);
 
-  // Core Game State
-  const [settings, setSettings] = useState<TrainingSettings>({
-    mode: "cities",
-    baseMap: "esri_satellite",
-    showLabels: false,
-    soundEnabled: true,
-    scopeCountry: "BRA",
-    cityPool: "all",
-    maptapOnly: false,
-    terrain3D: false,
-  });
+  // Core Game State (restores from localStorage or defaults to Whole World + MapTap base)
+  const [settings, setSettings] = useState<TrainingSettings>(() =>
+    getStoredTrainingSettings()
+  );
 
   const [cities, setCities] = useState<CityItem[]>([]);
   const [statesGeoJSON, setStatesGeoJSON] = useState<FeatureCollection | null>(
@@ -357,14 +352,22 @@ export function MapView() {
     return getPlayedCityIds(guessHistory);
   }, [guessHistory]);
 
-  const initialViewState = useMemo(
-    () => ({
-      longitude: -51.9253,
-      latitude: -14.235,
-      zoom: 3.5,
-    }),
-    []
-  );
+  const initialViewState = useMemo(() => {
+    const s = getStoredTrainingSettings();
+    const region = ALL_REGION_OPTIONS.find((r) => r.id === s.scopeCountry);
+    if (region) {
+      return {
+        longitude: region.center[0],
+        latitude: region.center[1],
+        zoom: region.zoom,
+      };
+    }
+    return {
+      longitude: 0,
+      latitude: 20,
+      zoom: 1.8,
+    };
+  }, []);
 
   // Sound sync
   useEffect(() => {
@@ -395,9 +398,9 @@ export function MapView() {
         const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
         const [cRes, sRes, cntRes] = await Promise.all([
-          fetch(`${basePath}/data/cities.json`),
-          fetch(`${basePath}/data/regions.geojson`),
-          fetch(`${basePath}/data/countries.geojson`),
+          fetch(`${basePath}/data/cities.json?v=20260925`, { cache: "no-cache" }),
+          fetch(`${basePath}/data/regions.geojson?v=20260925`, { cache: "no-cache" }),
+          fetch(`${basePath}/data/countries.geojson?v=20260925`, { cache: "no-cache" }),
         ]);
 
         if (cRes.ok && sRes.ok && cntRes.ok) {
@@ -438,17 +441,10 @@ export function MapView() {
 
           const storedHistory = getStoredGuessHistory();
           const initialPlayedIds = getPlayedCityIds(storedHistory);
+          const activeSettings = getStoredTrainingSettings();
 
           const initialTarget = selectTargetEntity({
-            settings: {
-              mode: "cities",
-              baseMap: "esri_satellite",
-              showLabels: false,
-              soundEnabled: true,
-              scopeCountry: "BRA",
-              cityPool: "all",
-              maptapOnly: false,
-            },
+            settings: activeSettings,
             cities: cData,
             statesGeoJSON: sData,
             countriesGeoJSON: cntData,
@@ -525,6 +521,7 @@ export function MapView() {
     (newVals: Partial<TrainingSettings>) => {
       const nextSettings = { ...settings, ...newVals };
       setSettings(nextSettings);
+      saveStoredTrainingSettings(nextSettings);
 
       if (
         newVals.mode !== undefined ||
