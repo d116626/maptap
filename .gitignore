@@ -3,6 +3,7 @@
 # data
 /data/
 !/data/**/.gitkeep
+
 # python
 .venv/
 __pycache__/

@@ -62,3 +62,24 @@ class LayerMetadata(BaseModel):
     data_url: Optional[str] = None
     visible_by_default: bool = True
     color: Optional[str] = None
+
+
+class CityItem(BaseModel):
+    id: str
+    name: str
+    country: str
+    country_code: str
+    state: Optional[str] = None
+    state_code: Optional[str] = None
+    lat: float
+    lng: float
+    population: int
+    is_capital: bool = False
+    continent: Optional[str] = None
+
+
+class CitiesDataset(BaseModel):
+    version: str = "1.0.0"
+    updated_at: str
+    cities: List[CityItem]
+
