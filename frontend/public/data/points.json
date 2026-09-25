@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "name": "Sample Points of Interest",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "sp-se",
+      "properties": {
+        "id": "sp-se",
+        "title": "Praça da Sé (Marco Zero)",
+        "category": "Landmark",
+        "description": "Marco zero da cidade de São Paulo.",
+        "rating": 4.5,
+        "icon": null,
+        "metadata": {
+          "city": "São Paulo",
+          "country": "BR"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.633308,
+          -23.55052
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sp-masp",
+      "properties": {
+        "id": "sp-masp",
+        "title": "MASP - Museu de Arte de São Paulo",
+        "category": "Museum",
+        "description": "Importante centro cultural e arquitetura icônica de Lina Bo Bardi.",
+        "rating": 4.8,
+        "icon": null,
+        "metadata": {
+          "city": "São Paulo",
+          "country": "BR"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.6559,
+          -23.5614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sp-ibira",
+      "properties": {
+        "id": "sp-ibira",
+        "title": "Parque Ibirapuera",
+        "category": "Park",
+        "description": "O maior parque urbano de São Paulo, área verde e cultura.",
+        "rating": 4.9,
+        "icon": null,
+        "metadata": {
+          "city": "São Paulo",
+          "country": "BR"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.6576,
+          -23.5874
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "sp-pinacoteca",
+      "properties": {
+        "id": "sp-pinacoteca",
+        "title": "Pinacoteca do Estado",
+        "category": "Museum",
+        "description": "Um dos mais importantes museus de arte do Brasil.",
+        "rating": 4.8,
+        "icon": null,
+        "metadata": {
+          "city": "São Paulo",
+          "country": "BR"
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.634,
+          -23.5342
+        ]
+      }
+    }
+  ]
+}
