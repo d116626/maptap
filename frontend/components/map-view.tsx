@@ -2,10 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, {
-  FullscreenControl,
   Layer,
   Marker,
-  NavigationControl,
   Source,
   type MapRef,
   type ViewStateChangeEvent,
@@ -307,6 +305,7 @@ export function MapView() {
     scopeCountry: "BRA",
     cityPool: "all",
     maptapOnly: false,
+    terrain3D: false,
   });
 
   const [cities, setCities] = useState<CityItem[]>([]);
@@ -332,6 +331,23 @@ export function MapView() {
   useEffect(() => {
     soundEffects.setEnabled(settings.soundEnabled);
   }, [settings.soundEnabled]);
+
+  // Camera pitch adjustment when toggling 3D terrain
+  useEffect(() => {
+    if (mapRef.current) {
+      if (settings.terrain3D) {
+        mapRef.current.easeTo({
+          pitch: 55,
+          duration: 1000,
+        });
+      } else {
+        mapRef.current.easeTo({
+          pitch: 0,
+          duration: 800,
+        });
+      }
+    }
+  }, [settings.terrain3D]);
 
   // Load public static datasets & initialize first target
   useEffect(() => {
@@ -443,7 +459,7 @@ export function MapView() {
     [cities, countriesGeoJSON, statesGeoJSON, settings, target?.id]
   );
 
-  // Keyboard shortcut: Space or Enter advances to next target
+  // Keyboard shortcut: Space or Enter skips or advances to next target
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
@@ -452,14 +468,14 @@ export function MapView() {
       ) {
         return;
       }
-      if (guessResult && (e.key === "Enter" || e.key === " ")) {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         pickNewTarget();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [guessResult, pickNewTarget]);
+  }, [pickNewTarget]);
 
   const handleUpdateSettings = useCallback(
     (newVals: Partial<TrainingSettings>) => {
@@ -828,6 +844,7 @@ export function MapView() {
       <Map
         ref={mapRef}
         {...viewState}
+        maxPitch={85}
         onMove={(evt: ViewStateChangeEvent) => setViewState(evt.viewState)}
         onClick={handleMapClick}
         mapLib={maplibregl}
@@ -835,9 +852,6 @@ export function MapView() {
         style={{ width: "100%", height: "100%" }}
         cursor={guessResult ? "grab" : "crosshair"}
       >
-        <NavigationControl position="bottom-right" />
-        <FullscreenControl position="bottom-right" />
-
         {/* 1. Highlight da Região Alvo (Outline Nítido + Preenchimento Quase 100% Transparente) */}
         {guessResult && targetRegionGeoJSON && (
           <Source id="target-region-source" type="geojson" data={targetRegionGeoJSON}>

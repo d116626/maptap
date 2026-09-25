@@ -6,17 +6,17 @@ import type { FeatureCollection } from "geojson";
 import { RegionSelector } from "./region-select-dialog";
 import { CityPoolSelector } from "./city-pool-selector";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   CheckCircle2,
+  Crosshair,
   Flame,
   MapPin,
   Map as MapIcon,
+  Navigation,
   Search,
   Trophy,
   Volume2,
   VolumeX,
-  XCircle,
 } from "lucide-react";
 
 interface UnifiedGamePanelProps {
@@ -61,7 +61,7 @@ export function UnifiedGamePanel({
 
   return (
     <div className="pointer-events-none fixed top-3 left-3 right-3 z-20 flex justify-center max-w-lg mx-auto">
-      <div className="pointer-events-auto w-full min-h-[144px] h-auto rounded-2xl border border-white/20 bg-background/95 p-3 shadow-2xl backdrop-blur-xl flex flex-col justify-between select-none">
+      <div className="pointer-events-auto w-full rounded-2xl border border-white/20 bg-background/95 p-2.5 sm:p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-2 select-none transition-all duration-200">
         {/* 1. Top Bar: Region Selector, City Pool Dropdown, Mode, Score, Audio & Search */}
         <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-border/50">
           {/* Left: Region & City Pool Selectors */}
@@ -169,57 +169,130 @@ export function UnifiedGamePanel({
           </div>
         </div>
 
-        {/* 2. Target Display: City • Region • Country */}
+        {/* 2. Target Display: City • Region • Country & Metadata */}
         <div className="py-0.5 text-center truncate">
           <h2 className="text-base sm:text-lg font-black tracking-tight text-foreground truncate leading-tight">
             {target.displayName}
           </h2>
-          {target.type === "city" && Boolean(target.population) && (
-            <div className="text-[11px] font-medium text-muted-foreground/80 tracking-tight mt-0.5 flex items-center justify-center gap-1 select-none">
-              <span className="text-muted-foreground/60">👥</span>
-              <span>
-                {(target.population || 0) >= 1_000_000
-                  ? `${((target.population || 0) / 1_000_000).toFixed(1)}M hab. (${(target.population || 0).toLocaleString("pt-BR")})`
-                  : `${(target.population || 0).toLocaleString("pt-BR")} hab.`}
+          <div className="text-[11px] font-medium text-muted-foreground/80 tracking-tight mt-0.5 flex items-center justify-center gap-1.5 select-none truncate">
+            {target.type === "city" && Boolean(target.population) && (
+              <span className="flex items-center gap-1">
+                <span className="text-muted-foreground/60">👥</span>
+                <span>
+                  {(target.population || 0) >= 1_000_000
+                    ? `${((target.population || 0) / 1_000_000).toFixed(1)}M hab. (${(target.population || 0).toLocaleString("pt-BR")})`
+                    : `${(target.population || 0).toLocaleString("pt-BR")} hab.`}
+                </span>
               </span>
-            </div>
-          )}
+            )}
+            {target.is_country_capital && (
+              <span className="px-1.5 py-0.2 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-300 font-semibold text-[10px] border border-amber-500/30">
+                🏛️ Capital
+              </span>
+            )}
+            {!target.is_country_capital && target.is_state_capital && (
+              <span className="px-1.5 py-0.2 rounded-md bg-blue-500/15 text-blue-700 dark:text-blue-300 font-semibold text-[10px] border border-blue-500/30">
+                🏢 State Capital
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* 3. Feedback Row: Distance and Clicked Region */}
-        <div className="h-10 flex items-center justify-between border-t border-border/40 pt-1">
-          {guessResult ? (
-            <div className="w-full flex items-center justify-between text-xs animate-in fade-in duration-100">
-              <div className="flex items-center gap-1.5 min-w-0 pr-2">
+        {/* 3. Feedback / Action Strip (Distance, Guess, Score & Advance) */}
+        {guessResult ? (
+          <div
+            className={`w-full rounded-xl p-2 px-3 border transition-all animate-in fade-in slide-in-from-top-1 duration-150 flex items-center justify-between gap-2.5 ${
+              guessResult.score >= 800
+                ? "bg-emerald-500/10 border-emerald-500/30"
+                : guessResult.score >= 500
+                ? "bg-amber-500/10 border-amber-500/30"
+                : "bg-rose-500/10 border-rose-500/30"
+            }`}
+          >
+            {/* Left: Distance & Clicked Place */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div
+                className={`size-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs ${
+                  guessResult.score >= 800
+                    ? "bg-emerald-500 text-white"
+                    : guessResult.score >= 500
+                    ? "bg-amber-500 text-white"
+                    : "bg-rose-500 text-white"
+                }`}
+              >
                 {guessResult.isCorrectRegion ? (
-                  <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="size-4.5" />
                 ) : (
-                  <XCircle className="size-4 text-rose-500 shrink-0" />
+                  <Navigation className="size-4 rotate-45" />
                 )}
-                <span className="font-black text-foreground shrink-0">
-                  {guessResult.distanceKm.toLocaleString("en-US")} km
-                </span>
-                <span
-                  className="text-muted-foreground truncate text-[11px]"
-                  title={clickedLocationText}
-                >
-                  • {clickedLocationText}
-                </span>
               </div>
 
-              <Badge
-                variant={guessResult.score >= 800 ? "default" : "secondary"}
-                className="text-[10px] px-2 py-0.5 font-bold shrink-0"
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-baseline gap-1.5 leading-none">
+                  <span className="font-black text-sm tracking-tight text-foreground">
+                    {guessResult.distanceKm < 1
+                      ? "< 1 km"
+                      : `${guessResult.distanceKm.toLocaleString("en-US")} km`}
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider ${
+                      guessResult.score >= 800
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : guessResult.score >= 500
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-rose-600 dark:text-rose-400"
+                    }`}
+                  >
+                    {guessResult.score >= 950
+                      ? "Bullseye!"
+                      : guessResult.score >= 800
+                      ? "Excellent!"
+                      : guessResult.score >= 500
+                      ? "Very Close"
+                      : guessResult.score >= 250
+                      ? "Good Try"
+                      : "Off Target"}
+                  </span>
+                </div>
+                <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                  <span className="opacity-70 font-medium">Clicked:</span>{" "}
+                  <span className="font-semibold text-foreground/90">
+                    {clickedLocationText}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Points Pill */}
+            <div className="flex items-center shrink-0">
+              <div
+                className={`px-2.5 py-1 rounded-lg font-mono font-bold text-xs flex items-center gap-1 shadow-xs ${
+                  guessResult.score >= 800
+                    ? "bg-emerald-500 text-white"
+                    : guessResult.score >= 500
+                    ? "bg-amber-500 text-white"
+                    : "bg-muted text-foreground border border-border/60"
+                }`}
               >
-                +{guessResult.score} pts
-              </Badge>
+                <span>+{guessResult.score}</span>
+                <span className="text-[10px] font-normal opacity-85">pts</span>
+              </div>
             </div>
-          ) : (
-            <div className="w-full flex items-center justify-center text-[11px] text-muted-foreground/75 font-medium">
-              <span>Tap the map to guess the location</span>
+          </div>
+        ) : (
+          /* Idle Hint Bar: Compact, clean, zero dead space */
+          <div className="w-full py-1.5 px-3 rounded-xl bg-muted/40 border border-border/40 flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Crosshair className="size-3.5 text-primary/70 animate-pulse shrink-0" />
+              <span className="text-[11px] font-medium truncate">
+                Tap anywhere on the map to guess
+              </span>
             </div>
-          )}
-        </div>
+            <span className="text-[10px] font-mono text-muted-foreground/60 shrink-0 hidden sm:inline">
+              space to skip
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

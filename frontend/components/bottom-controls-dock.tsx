@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
   Compass,
+  Mountain,
   SkipForward,
   Tag,
   X,
@@ -74,7 +75,33 @@ export function BottomControlsDock({
 
           <div className="h-5 w-px bg-border/60 shrink-0" />
 
-          {/* 3. Skip or Next Round (Fixed: w-10 h-10) */}
+          {/* 3. 3D Terrain Elevation Toggle (Fixed: w-10 h-10) */}
+          <Button
+            variant={settings.terrain3D ? "default" : "ghost"}
+            size="sm"
+            onClick={() =>
+              onUpdateSettings({ terrain3D: !settings.terrain3D })
+            }
+            className={`h-10 w-10 p-0 rounded-xl transition-all shrink-0 flex items-center justify-center relative ${
+              settings.terrain3D
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            title={
+              settings.terrain3D
+                ? "Disable 3D Terrain"
+                : "Enable 3D Terrain Elevation (Mountains & Relief)"
+            }
+          >
+            <Mountain className="size-4" />
+            {settings.terrain3D && (
+              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-emerald-400" />
+            )}
+          </Button>
+
+          <div className="h-5 w-px bg-border/60 shrink-0" />
+
+          {/* 4. Skip or Next Round (Fixed: w-10 h-10) */}
           {hasGuessed ? (
             <Button
               onClick={onNextTarget}

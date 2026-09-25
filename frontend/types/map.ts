@@ -7,7 +7,8 @@ export type BaseMapId =
   | "shaded_relief"
   | "esri_topo"
   | "esri_streets"
-  | "osm";
+  | "osm"
+  | "mapbox_streets";
 
 export interface BaseMapOption {
   id: BaseMapId;
@@ -99,6 +100,7 @@ export interface TrainingSettings {
   baseMap: BaseMapId;
   cityPool: CityPoolMode;
   maptapOnly?: boolean;
+  terrain3D?: boolean;
   datasetPool?: CityPoolMode;
 }
 

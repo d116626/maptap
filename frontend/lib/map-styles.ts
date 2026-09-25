@@ -219,4 +219,33 @@ export const BASEMAP_STYLES: Record<BaseMapId, BaseMapOption> = {
       ],
     },
   },
+  mapbox_streets: {
+    id: "mapbox_streets",
+    name: "Mapbox Streets",
+    category: "Standard",
+    description: "Mapbox Streets high-definition vector cartography",
+    style: {
+      version: 8,
+      sources: {
+        "mapbox-streets-tiles": {
+          type: "raster",
+          tiles: [
+            `https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN || ""}`,
+          ],
+          tileSize: 256,
+          attribution: "&copy; Mapbox &copy; OpenStreetMap",
+          maxzoom: 20,
+        },
+      },
+      layers: [
+        {
+          id: "mapbox-streets-layer",
+          type: "raster",
+          source: "mapbox-streets-tiles",
+          minzoom: 0,
+          maxzoom: 20,
+        },
+      ],
+    },
+  },
 };

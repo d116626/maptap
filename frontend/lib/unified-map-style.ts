@@ -45,6 +45,13 @@ export const BASEMAP_OPTIONS: BaseMapOption[] = [
     icon: "🏙️",
   },
   {
+    id: "mapbox_streets",
+    name: "Mapbox Streets",
+    category: "Standard",
+    description: "Mapbox Streets high-definition vector cartography",
+    icon: "🗺️",
+  },
+  {
     id: "osm",
     name: "OpenStreetMap",
     category: "Standard",
@@ -52,6 +59,8 @@ export const BASEMAP_OPTIONS: BaseMapOption[] = [
     icon: "🌐",
   },
 ];
+
+const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
 const RASTER_TILE_SOURCES: Record<
   BaseMapId,
@@ -104,6 +113,18 @@ const RASTER_TILE_SOURCES: Record<
     tileSize: 256,
     maxzoom: 19,
     attribution: "Tiles &copy; Esri, DeLorme, TomTom",
+  },
+  mapbox_streets: {
+    tiles: mapboxToken
+      ? [
+          `https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${mapboxToken}`,
+        ]
+      : [
+          "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        ],
+    tileSize: 256,
+    maxzoom: 20,
+    attribution: "&copy; Mapbox &copy; OpenStreetMap",
   },
   osm: {
     tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
@@ -175,9 +196,36 @@ export function buildUnifiedMapLibreStyle(
     },
   });
 
+  // 3. Terrain 3D Elevation (Raster DEM)
+  sources["terrain-dem-source"] = mapboxToken
+    ? {
+        type: "raster-dem",
+        tiles: [
+          `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=${mapboxToken}`,
+        ],
+        tileSize: 256,
+        encoding: "mapbox",
+        maxzoom: 14,
+      }
+    : {
+        type: "raster-dem",
+        tiles: [
+          "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+        ],
+        tileSize: 256,
+        encoding: "terrarium",
+        maxzoom: 15,
+      };
+
   return {
     version: 8,
     sources,
     layers,
+    terrain: settings.terrain3D
+      ? {
+          source: "terrain-dem-source",
+          exaggeration: 1.5,
+        }
+      : undefined,
   };
 }
