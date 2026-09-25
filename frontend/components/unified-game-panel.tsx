@@ -62,7 +62,7 @@ export function UnifiedGamePanel({
   if (!target) return null;
 
   return (
-    <div className="pointer-events-none fixed top-3 left-3 right-3 z-20 flex justify-center max-w-lg mx-auto">
+    <div className="pointer-events-none fixed top-3 left-3 right-3 z-20 flex justify-center max-w-xl mx-auto">
       <div className="pointer-events-auto w-full rounded-2xl border border-white/20 bg-background/95 p-2.5 sm:p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-2 select-none transition-all duration-200">
         {/* 1. Top Bar: Region Selector, City Pool Dropdown, Mode, Score, Audio & Search */}
         <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-border/50">
@@ -178,11 +178,11 @@ export function UnifiedGamePanel({
         </div>
 
         {/* 2. Target Display: City • Region • Country & Metadata */}
-        <div className="py-0.5 text-center truncate">
-          <h2 className="text-base sm:text-lg font-black tracking-tight text-foreground truncate leading-tight">
+        <div className="py-0.5 text-center px-1">
+          <h2 className="text-base sm:text-lg font-black tracking-tight text-foreground leading-snug break-words">
             {target.displayName}
           </h2>
-          <div className="text-[11px] font-medium text-muted-foreground/80 tracking-tight mt-0.5 flex items-center justify-center gap-1.5 select-none truncate">
+          <div className="text-[11px] font-medium text-muted-foreground/80 tracking-tight mt-0.5 flex flex-wrap items-center justify-center gap-1.5 select-none">
             {target.type === "city" && Boolean(target.population) && (
               <span className="flex items-center gap-1">
                 <span className="text-muted-foreground/60">👥</span>
@@ -262,7 +262,7 @@ export function UnifiedGamePanel({
                       : "Off Target"}
                   </span>
                 </div>
-                <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                <div className="text-[11px] text-muted-foreground mt-0.5 break-words">
                   <span className="opacity-70 font-medium">Clicked:</span>{" "}
                   <span className="font-semibold text-foreground/90">
                     {clickedLocationText}

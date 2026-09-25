@@ -151,7 +151,7 @@ export function CityPoolSelector({
         title="Select City Pool Filter"
       >
         <span className="text-xs leading-none">{activeOption.icon}</span>
-        <span className="truncate max-w-[85px] text-[11px] font-bold">
+        <span className="text-[11px] font-bold whitespace-nowrap">
           {activeOption.shortLabel}
         </span>
         {maptapOnly && (
@@ -230,13 +230,13 @@ export function CityPoolSelector({
                       : "text-foreground/90 hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
-                  <div className="flex items-center gap-2 truncate min-w-0 mr-2">
+                  <div className="flex items-center gap-2 min-w-0 mr-2">
                     <span className="text-sm shrink-0">{opt.icon}</span>
-                    <div className="flex flex-col truncate">
+                    <div className="flex flex-col">
                       <span className="font-semibold text-xs leading-tight">
                         {opt.label}
                       </span>
-                      <span className="text-[10px] text-muted-foreground font-normal truncate">
+                      <span className="text-[10px] text-muted-foreground font-normal">
                         {opt.description}
                       </span>
                     </div>

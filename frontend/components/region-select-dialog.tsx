@@ -265,7 +265,7 @@ export function RegionSelector({
         title="Select Training Region"
       >
         <span className="text-sm leading-none">{currentOption.flag}</span>
-        <span className="truncate max-w-[95px] text-[11px] font-bold">
+        <span className="text-[11px] font-bold whitespace-nowrap">
           {currentOption.name}
         </span>
         <ChevronDown
@@ -340,11 +340,11 @@ export function RegionSelector({
                     }`}
                   >
                     {/* Left: Flag and Name */}
-                    <div className="flex items-center gap-2 truncate min-w-0 flex-1 pr-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1 pr-2">
                       <span className="text-sm shrink-0 leading-none">
                         {item.flag}
                       </span>
-                      <span className="truncate font-medium">{item.name}</span>
+                      <span className="font-medium whitespace-normal">{item.name}</span>
                     </div>
 
                     {/* Right: Tabular Dynamic Badge and Checkmark (Fixed Layout) */}

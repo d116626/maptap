@@ -115,8 +115,8 @@ export function CitiesCatalogDialog({
                 className="py-2.5 flex items-center justify-between gap-3 hover:bg-muted/50 px-2 rounded-lg transition-colors"
               >
                 <div className="flex flex-col min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm truncate">{city.name}</span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-sm">{city.name}</span>
                     {city.is_capital && (
                       <Badge variant="secondary" className="text-[10px] py-0 px-1.5 font-normal">
                         Capital
@@ -128,7 +128,7 @@ export function CitiesCatalogDialog({
                       </Badge>
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground truncate">
+                  <span className="text-xs text-muted-foreground">
                     {city.state ? `${city.state} • ` : ""}
                     {city.country}
                   </span>

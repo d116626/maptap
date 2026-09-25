@@ -234,11 +234,11 @@ export function TrophyDashboardDialog({
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="font-bold text-foreground truncate text-sm">
+                        <span className="font-bold text-foreground text-sm">
                           {item.targetName}
                         </span>
                         {item.targetDetails && (
-                          <span className="text-[11px] text-muted-foreground truncate max-w-[200px]">
+                          <span className="text-[11px] text-muted-foreground">
                             ({item.targetDetails})
                           </span>
                         )}
@@ -251,7 +251,7 @@ export function TrophyDashboardDialog({
                         </span>
 
                         {item.clickedRegionName && (
-                          <span className="truncate max-w-[220px]">
+                          <span>
                             • Clicado: <strong className="text-foreground">{item.clickedRegionName}</strong>
                             {item.clickedRegionCountry ? ` (${item.clickedRegionCountry})` : ""}
                           </span>

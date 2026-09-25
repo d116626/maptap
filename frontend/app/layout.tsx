@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MapTap",
   description: "MapTap - Interactive maps with MapLibre & Next.js",
+  referrer: "no-referrer-when-downgrade",
 };
 
 export default function RootLayout({
