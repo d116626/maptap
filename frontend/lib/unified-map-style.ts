@@ -177,7 +177,11 @@ export function buildUnifiedMapLibreStyle(
   if (mapboxToken) {
     sources["composite"] = {
       type: "vector",
-      url: `https://api.mapbox.com/v4/mapbox.mapbox-streets-v8.json?secure&access_token=${mapboxToken}`,
+      tiles: [
+        `https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.vector.pbf?access_token=${mapboxToken}`,
+      ],
+      minzoom: 0,
+      maxzoom: 16,
     };
 
     const overlayVisibility = settings.showLabels ? "visible" : "none";

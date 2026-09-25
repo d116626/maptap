@@ -32,6 +32,22 @@ from utils.schemas import (
 
 def export_cities_dataset() -> Path:
     """Validate and export cities dataset to data/process and frontend/public/data."""
+    out_public = FRONTEND_PUBLIC_DATA_DIR / "cities.json"
+    if out_public.exists():
+        try:
+            with open(out_public, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+                count = (
+                    len(existing.get("cities", []))
+                    if isinstance(existing, dict)
+                    else len(existing)
+                )
+                if count > 500:
+                    print(f"Skipping cities export: {out_public} already contains {count} cities.")
+                    return out_public
+        except Exception:
+            pass
+
     dataset = CitiesDataset(
         version="1.0.0",
         updated_at=datetime.now(timezone.utc).isoformat(),
