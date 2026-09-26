@@ -30,6 +30,13 @@ const COUNTRY_SUBDIVISIONS: Record<
   AUS: { count: 11, label: "states/terr", shortLabel: "states" },
   IND: { count: 36, label: "states/UTs", shortLabel: "states" },
   CHN: { count: 32, label: "provinces", shortLabel: "prov" },
+  ITA: { count: 20, label: "regions", shortLabel: "reg" },
+  GBR: { count: 4, label: "nations", shortLabel: "nat" },
+  ARG: { count: 24, label: "provinces", shortLabel: "prov" },
+  ZAF: { count: 9, label: "provinces", shortLabel: "prov" },
+  COL: { count: 33, label: "departments", shortLabel: "dep" },
+  IDN: { count: 33, label: "provinces", shortLabel: "prov" },
+  POL: { count: 16, label: "voivodeships", shortLabel: "voiv" },
 };
 
 const CONTINENT_COUNTRY_COUNTS: Record<string, number> = {

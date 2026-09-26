@@ -135,6 +135,66 @@ const RASTER_TILE_SOURCES: Record<
   },
 };
 
+export function getOverlayLayerVisibility(
+  layer: LayerSpecification,
+  settings: TrainingSettings
+): "visible" | "none" {
+  const sourceLayer = "source-layer" in layer ? layer["source-layer"] : undefined;
+  const metadata = layer.metadata as Record<string, unknown> | undefined;
+  const fc = (metadata && (metadata["mapbox:featureComponent"] as string)) || "";
+  const id = layer.id || "";
+
+  // 1. Borders & Boundaries (Fronteiras e Divisas Internacionais / Estaduais - Linhas puras sem texto)
+  if (sourceLayer === "admin" || fc === "admin-boundaries") {
+    return (settings.showBorders ?? true) ? "visible" : "none";
+  }
+
+  // 2. Country Names (Original Mapbox Vector Tiles)
+  if (id === "country-label" || id === "continent-label") {
+    return (settings.showCountryNames ?? false) ? "visible" : "none";
+  }
+
+  // 3. State Labels (Silenciado no Mapbox porque usamos nosso layer customizado apenas para as subdivisões/estados)
+  if (id === "state-label") {
+    return "none";
+  }
+
+  // 3. City & Municipality Names (Nomes de Cidades, Municípios e Vilas)
+  if (
+    id === "settlement-major-label" ||
+    id === "settlement-minor-label" ||
+    id === "settlement-subdivision-label" ||
+    sourceLayer === "place_label"
+  ) {
+    return (settings.showCityNames ?? false) ? "visible" : "none";
+  }
+
+  // 4. Roads & Highways (Rodovias, Estradas, Ruas, Túneis e Pontes)
+  if (
+    sourceLayer === "road" ||
+    sourceLayer === "motorway_junction" ||
+    fc === "road-network" ||
+    fc === "walking-cycling" ||
+    fc === "transit"
+  ) {
+    return (settings.showRoads ?? false) ? "visible" : "none";
+  }
+
+  // 5. Physical Geography & POIs (Rios, Montanhas, Lagos, Aeroportos)
+  if (
+    sourceLayer === "natural_label" ||
+    sourceLayer === "poi_label" ||
+    sourceLayer === "airport_label" ||
+    sourceLayer === "transit_stop_label" ||
+    fc === "natural-features" ||
+    fc === "point-of-interest-labels"
+  ) {
+    return (settings.showPhysical ?? false) ? "visible" : "none";
+  }
+
+  return "none";
+}
+
 /**
  * Builds an immutable, unified MapLibre Style Specification that declares all
  * raster base layers, labels overlay, and highlight layers upfront.
@@ -173,7 +233,64 @@ export function buildUnifiedMapLibreStyle(
     });
   }
 
-  // 2. Overlays - Full Standard Mapbox Streets Vector Layers (or Esri Reference fallback)
+  // 2. Overlays - Esri Reference and Mapbox Streets
+  const provider = settings.overlayProvider || (mapboxToken ? "mapbox" : "esri");
+
+  // A. Esri Roads Overlay (World Transportation)
+  sources["overlay-source-esri-roads"] = {
+    type: "raster",
+    tiles: [
+      "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}",
+    ],
+    tileSize: 256,
+    maxzoom: 19,
+    attribution: "Tiles &copy; Esri, DeLorme, HERE",
+  };
+  layers.push({
+    id: "overlay-layer-esri-roads",
+    type: "raster",
+    source: "overlay-source-esri-roads",
+    minzoom: 0,
+    maxzoom: 19,
+    layout: {
+      visibility:
+        provider === "esri" && (settings.showRoads ?? false)
+          ? "visible"
+          : "none",
+    },
+    paint: {
+      "raster-opacity": 0.95,
+    },
+  });
+
+  // B. Esri Places & Boundaries Overlay (World Boundaries and Places)
+  sources["overlay-source-esri-places"] = {
+    type: "raster",
+    tiles: [
+      "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    ],
+    tileSize: 256,
+    maxzoom: 19,
+    attribution: "Tiles &copy; Esri, DeLorme, HERE",
+  };
+  layers.push({
+    id: "overlay-layer-esri-places",
+    type: "raster",
+    source: "overlay-source-esri-places",
+    minzoom: 0,
+    maxzoom: 19,
+    layout: {
+      visibility:
+        provider === "esri" && (settings.showBorders ?? true)
+          ? "visible"
+          : "none",
+    },
+    paint: {
+      "raster-opacity": 0.95,
+    },
+  });
+
+  // C. Mapbox Streets Vector Layers
   if (mapboxToken) {
     sources["composite"] = {
       type: "vector",
@@ -184,41 +301,20 @@ export function buildUnifiedMapLibreStyle(
       maxzoom: 16,
     };
 
-    const overlayVisibility = settings.showLabels ? "visible" : "none";
+    const isMapboxActive = provider === "mapbox";
     for (const rawLayer of mapboxOverlayLayers) {
       const layer = rawLayer as LayerSpecification;
+      const visibility = isMapboxActive
+        ? getOverlayLayerVisibility(layer, settings)
+        : "none";
       layers.push({
         ...layer,
         layout: {
           ...(layer.layout || {}),
-          visibility: overlayVisibility,
+          visibility,
         },
       } as LayerSpecification);
     }
-  } else {
-    // Fallback: Esri Reference Overlay (100% free, no API key required, no watermarks)
-    sources["overlay-source-labels"] = {
-      type: "raster",
-      tiles: [
-        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-      ],
-      tileSize: 256,
-      maxzoom: 19,
-      attribution: "Tiles &copy; Esri, DeLorme, HERE",
-    };
-    layers.push({
-      id: "overlay-layer-labels",
-      type: "raster",
-      source: "overlay-source-labels",
-      minzoom: 0,
-      maxzoom: 19,
-      layout: {
-        visibility: settings.showLabels ? "visible" : "none",
-      },
-      paint: {
-        "raster-opacity": 0.95,
-      },
-    });
   }
 
   // 3. Terrain 3D Elevation (Raster DEM)

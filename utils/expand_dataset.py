@@ -39,6 +39,13 @@ COUNTRY_NAMES = {
     "AUS": "Australia",
     "IND": "India",
     "CHN": "China",
+    "ITA": "Italy",
+    "GBR": "United Kingdom",
+    "ARG": "Argentina",
+    "ZAF": "South Africa",
+    "COL": "Colombia",
+    "IDN": "Indonesia",
+    "POL": "Poland",
 }
 
 COUNTRY_CONTINENTS = {
@@ -53,6 +60,13 @@ COUNTRY_CONTINENTS = {
     "AUS": "Oceania",
     "IND": "Asia",
     "CHN": "Asia",
+    "ITA": "Europe",
+    "GBR": "Europe",
+    "ARG": "South America",
+    "ZAF": "Africa",
+    "COL": "South America",
+    "IDN": "Asia",
+    "POL": "Europe",
 }
 
 CONTINENT_NAMES = {
@@ -97,6 +111,14 @@ STATE_EN_OVERRIDES = {
     "Nouvelle-Aquitaine": "New Aquitaine",
     "Île-de-France": "Île-de-France",
     "Grand Est": "Grand Est",
+    # Italy
+    "Lombardia": "Lombardy",
+    "Piemonte": "Piedmont",
+    "Sardegna": "Sardinia",
+    "Toscana": "Tuscany",
+    "Valle d'Aosta": "Aosta Valley",
+    "Trentino-Alto Adige": "Trentino-South Tyrol",
+    "Puglia": "Apulia",
 }
 
 CUSTOM_COUNTRY_MAP = {
@@ -192,7 +214,7 @@ def build_regions(ne_data):
             if (f["properties"].get("adm0_a3") == country_code or f["properties"].get("sov_a3") == country_code)
         ]
 
-        if country_code in ("FRA", "ESP"):
+        if country_code in ("FRA", "ESP", "ITA"):
             by_region = {}
             for f in country_ne_feats:
                 r_name = f["properties"].get("region") or f["properties"].get("name")
@@ -226,11 +248,40 @@ def build_regions(ne_data):
                     },
                     "geometry": round_coords(simplified, precision=3),
                 })
+        elif country_code == "GBR":
+            by_gu = {}
+            for f in country_ne_feats:
+                gu = f["properties"].get("geonunit")
+                if gu in ("England", "Scotland", "Wales", "Northern Ireland"):
+                    by_gu.setdefault(gu, []).append(f)
+
+            for gu_name, feats in by_gu.items():
+                geoms = [shape(f["geometry"]) for f in feats if f.get("geometry")]
+                merged = unary_union(geoms)
+                simplified = merged.simplify(0.012, preserve_topology=True)
+                if simplified.is_empty:
+                    continue
+                code = {"England": "ENG", "Scotland": "SCT", "Wales": "WLS", "Northern Ireland": "NIR"}[gu_name]
+                out_features.append({
+                    "type": "Feature",
+                    "properties": {
+                        "name": gu_name,
+                        "state_name": gu_name,
+                        "state_code": code,
+                        "country": country_name,
+                        "country_code": country_code,
+                        "continent": continent,
+                        "type": "state",
+                    },
+                    "geometry": round_coords(simplified, precision=3),
+                })
         else:
             for f in country_ne_feats:
                 p = f["properties"]
                 orig_name = p.get("name_en") or p.get("name")
                 raw_name = p.get("name")
+                if not raw_name or raw_name == "None":
+                    continue
                 display_name = STATE_EN_OVERRIDES.get(raw_name, STATE_EN_OVERRIDES.get(orig_name, orig_name))
 
                 code = p.get("postal") or p.get("iso_3166_2") or p.get("code_local") or ""

@@ -95,7 +95,14 @@ export function getPlayedCityIds(history: GuessHistoryItem[]): Set<string> {
 export const DEFAULT_TRAINING_SETTINGS: TrainingSettings = {
   mode: "cities",
   baseMap: "esri_satellite",
-  showLabels: false,
+  showLabels: true,
+  showBorders: true,
+  showCountryNames: false,
+  showRoads: false,
+  showRegionNames: false,
+  showCityNames: false,
+  showPhysical: false,
+  overlayProvider: "mapbox",
   soundEnabled: true,
   scopeCountry: "ALL", // Whole World default
   cityPool: "all",
@@ -114,9 +121,41 @@ export function getStoredTrainingSettings(): TrainingSettings {
     const raw = window.localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (!raw) return DEFAULT_TRAINING_SETTINGS;
     const parsed = JSON.parse(raw);
+    const showBorders =
+      parsed.showBorders !== undefined
+        ? parsed.showBorders
+        : parsed.showLabels ?? true;
+    const showCountryNames = parsed.showCountryNames ?? false;
+    const showRegionNames =
+      parsed.showRegionNames !== undefined
+        ? parsed.showRegionNames
+        : parsed.showPlaceNames ?? false;
+    const showCityNames =
+      parsed.showCityNames !== undefined
+        ? parsed.showCityNames
+        : parsed.showPlaceNames ?? false;
+    const showRoads = parsed.showRoads ?? false;
+    const showPhysical = parsed.showPhysical ?? false;
+    const overlayProvider: "mapbox" | "esri" =
+      parsed.overlayProvider === "esri" ? "esri" : "mapbox";
+
     return {
       ...DEFAULT_TRAINING_SETTINGS,
       ...parsed,
+      showBorders,
+      showCountryNames,
+      showRegionNames,
+      showCityNames,
+      showRoads,
+      showPhysical,
+      overlayProvider,
+      showLabels:
+        showBorders ||
+        showCountryNames ||
+        showRegionNames ||
+        showCityNames ||
+        showRoads ||
+        showPhysical,
     };
   } catch (err) {
     console.error("Failed to read settings from localStorage:", err);

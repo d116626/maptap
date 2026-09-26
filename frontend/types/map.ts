@@ -94,8 +94,18 @@ export type CityPoolMode =
   | "capitals"
   | "maptap"; // legacy backwards compatibility
 
+export type OverlayProvider = "mapbox" | "esri";
+
 export interface TrainingSettings {
   showLabels: boolean;
+  showBorders?: boolean;
+  showCountryNames?: boolean;
+  showRoads?: boolean;
+  showPlaceNames?: boolean;
+  showRegionNames?: boolean;
+  showCityNames?: boolean;
+  showPhysical?: boolean;
+  overlayProvider?: OverlayProvider;
   soundEnabled: boolean;
   scopeCountry: string; // "ALL" | "BRA" | "USA" | "EUR"
   mode: TrainingMode;

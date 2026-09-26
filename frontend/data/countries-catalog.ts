@@ -246,7 +246,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           -34
         ],
         "zoom": 4.5,
-        "badge": "42 cities"
+        "badge": "24 regions | 42 cities"
       },
       {
         "id": "BOL",
@@ -290,7 +290,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           4
         ],
         "zoom": 4.5,
-        "badge": "70 cities"
+        "badge": "33 regions | 70 cities"
       },
       {
         "id": "ECU",
@@ -1169,7 +1169,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           42.83
         ],
         "zoom": 4.5,
-        "badge": "91 cities"
+        "badge": "20 regions | 91 cities"
       },
       {
         "id": "JEY",
@@ -1312,7 +1312,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           52
         ],
         "zoom": 4.5,
-        "badge": "44 cities"
+        "badge": "16 regions | 44 cities"
       },
       {
         "id": "PRT",
@@ -1334,7 +1334,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           54
         ],
         "zoom": 4.5,
-        "badge": "131 cities"
+        "badge": "4 regions | 131 cities"
       },
       {
         "id": "ROU",
@@ -1659,7 +1659,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           -5
         ],
         "zoom": 4.5,
-        "badge": "100 cities"
+        "badge": "33 regions | 100 cities"
       },
       {
         "id": "IRQ",
@@ -2643,7 +2643,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           -29
         ],
         "zoom": 4.5,
-        "badge": "46 cities"
+        "badge": "9 regions | 46 cities"
       }
     ]
   },

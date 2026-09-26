@@ -761,6 +761,38 @@ export function MapView() {
     );
   }, [guessResult]);
 
+  // Memoized point features for all 303 regional division centroids (strictly states/provinces/regions)
+  const regionLabelsGeoJSON = useMemo<FeatureCollection | null>(() => {
+    if (!statesGeoJSON?.features) return null;
+    const features: Feature[] = [];
+
+    for (const f of statesGeoJSON.features) {
+      if (!f.geometry) continue;
+      const center = calculateFeatureCenter(f.geometry);
+      const name = f.properties?.state_name || f.properties?.name || "";
+      if (!name) continue;
+
+      features.push({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: center,
+        },
+        properties: {
+          name: name.toUpperCase(),
+          country_code: f.properties?.country_code || "",
+        },
+      });
+    }
+
+    if (features.length === 0) return null;
+
+    return {
+      type: "FeatureCollection",
+      features,
+    };
+  }, [statesGeoJSON]);
+
   // Map Click handler (Player makes a guess)
   const handleMapClick = useCallback(
     (e: MapLayerMouseEvent) => {
@@ -930,6 +962,48 @@ export function MapView() {
         style={{ width: "100%", height: "100%" }}
         cursor={guessResult ? "grab" : "crosshair"}
       >
+        {/* Universal Region Labels for France, Spain, Germany, US, Brazil, etc., and Countries worldwide */}
+        {settings.overlayProvider !== "esri" &&
+          (settings.showRegionNames ?? settings.showPlaceNames) &&
+          regionLabelsGeoJSON && (
+            <Source id="custom-region-labels-source" type="geojson" data={regionLabelsGeoJSON}>
+              <Layer
+                id="custom-region-labels-layer"
+                type="symbol"
+                minzoom={2}
+                maxzoom={11}
+                layout={{
+                  "text-field": ["get", "name"],
+                  "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
+                  "text-size": [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    2,
+                    8,
+                    4,
+                    10,
+                    6,
+                    12,
+                    8,
+                    14,
+                  ],
+                  "text-letter-spacing": 0.12,
+                  "text-max-width": 7,
+                  "text-transform": "uppercase",
+                  "text-allow-overlap": false,
+                  "text-ignore-placement": false,
+                }}
+                paint={{
+                  "text-color": "#ffffff",
+                  "text-halo-color": "#000000",
+                  "text-halo-width": 1.5,
+                  "text-opacity": 0.8,
+                }}
+              />
+            </Source>
+          )}
+
         {/* 1. Highlight da Região Alvo (Outline Nítido + Preenchimento Quase 100% Transparente) */}
         {guessResult && targetRegionGeoJSON && (
           <Source id="target-region-source" type="geojson" data={targetRegionGeoJSON}>
