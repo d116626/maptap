@@ -276,10 +276,10 @@ export const REGION_TABS: RegionTabDefinition[] = [
         "flag": "🇨🇱",
         "center": [
           -71,
-          -30
+          -37
         ],
-        "zoom": 4.5,
-        "badge": "39 cities"
+        "zoom": 3.3,
+        "badge": "16 regions | 39 cities"
       },
       {
         "id": "COL",
@@ -1353,10 +1353,10 @@ export const REGION_TABS: RegionTabDefinition[] = [
         "flag": "🇷🇺",
         "center": [
           100,
-          60
+          62
         ],
-        "zoom": 4.5,
-        "badge": "196 cities"
+        "zoom": 2.3,
+        "badge": "8 regions | 196 cities"
       },
       {
         "id": "SMR",
@@ -1616,7 +1616,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           13
         ],
         "zoom": 4.5,
-        "badge": "74 cities"
+        "badge": "17 regions | 74 cities"
       },
       {
         "id": "GEO",
@@ -1790,7 +1790,7 @@ export const REGION_TABS: RegionTabDefinition[] = [
           2.5
         ],
         "zoom": 4.5,
-        "badge": "33 cities"
+        "badge": "16 regions | 33 cities"
       },
       {
         "id": "MNG",
@@ -1954,8 +1954,8 @@ export const REGION_TABS: RegionTabDefinition[] = [
           35,
           39
         ],
-        "zoom": 4.5,
-        "badge": "108 cities"
+        "zoom": 5,
+        "badge": "7 regions | 108 cities"
       },
       {
         "id": "UZB",

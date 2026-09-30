@@ -389,7 +389,7 @@ export function MapView() {
 
         const [cRes, sRes, cntRes] = await Promise.all([
           fetch(`${basePath}/data/cities.json?v=20260925`, { cache: "no-cache" }),
-          fetch(`${basePath}/data/regions.geojson?v=20260925`, { cache: "no-cache" }),
+          fetch(`${basePath}/data/regions.geojson?v=20260930`, { cache: "no-cache" }),
           fetch(`${basePath}/data/countries.geojson?v=20260925`, { cache: "no-cache" }),
         ]);
 

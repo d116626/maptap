@@ -46,6 +46,11 @@ COUNTRY_NAMES = {
     "COL": "Colombia",
     "IDN": "Indonesia",
     "POL": "Poland",
+    "RUS": "Russia",
+    "TUR": "Türkiye",
+    "CHL": "Chile",
+    "PHL": "Philippines",
+    "MYS": "Malaysia",
 }
 
 COUNTRY_CONTINENTS = {
@@ -67,6 +72,11 @@ COUNTRY_CONTINENTS = {
     "COL": "South America",
     "IDN": "Asia",
     "POL": "Europe",
+    "RUS": "Europe",
+    "TUR": "Asia",
+    "CHL": "South America",
+    "PHL": "Asia",
+    "MYS": "Asia",
 }
 
 CONTINENT_NAMES = {
@@ -119,7 +129,90 @@ STATE_EN_OVERRIDES = {
     "Valle d'Aosta": "Aosta Valley",
     "Trentino-Alto Adige": "Trentino-South Tyrol",
     "Puglia": "Apulia",
+    # Chile
+    "Región Metropolitana de Santiago": "Santiago Metropolitan",
+    "Magallanes y Antártica Chilena": "Magallanes",
 }
+
+# Russia: NE "region" is outdated (no North Caucasian/Southern split, Buryatia/Zabaykalsky under Siberia)
+RUS_SOUTHERN = {
+    "Krasnodar", "Adygey", "Kalmyk", "Astrakhan'", "Volgograd", "Rostov", "Crimea", "Sevastopol",
+}
+RUS_NORTH_CAUCASIAN = {
+    "Karachay-Cherkess", "Kabardin-Balkar", "North Ossetia", "Ingush", "Chechnya", "Dagestan", "Stavropol'",
+}
+RUS_FAR_EASTERN_EXTRA = {"Buryat", "Chita"}
+RUS_DISTRICTS = {
+    "Central": ("Central Federal District", "CEN"),
+    "Northwestern": ("Northwestern Federal District", "NW"),
+    "Southern": ("Southern Federal District", "SOU"),
+    "North Caucasian": ("North Caucasian Federal District", "NC"),
+    "Volga": ("Volga Federal District", "VOL"),
+    "Urals": ("Ural Federal District", "URA"),
+    "Siberian": ("Siberian Federal District", "SIB"),
+    "Far Eastern": ("Far Eastern Federal District", "FE"),
+}
+
+# Türkiye: 81 provinces grouped by plate code into the 7 geographic regions
+TUR_REGIONS = {
+    "Marmara": ("Marmara Region", "MAR", {10, 11, 16, 17, 22, 34, 39, 41, 54, 59, 77}),
+    "Aegean": ("Aegean Region", "AEG", {3, 9, 20, 35, 43, 45, 48, 64}),
+    "Mediterranean": ("Mediterranean Region", "MED", {1, 7, 15, 31, 32, 33, 46, 80}),
+    "Central Anatolia": ("Central Anatolia Region", "CAN", {6, 18, 26, 38, 40, 42, 50, 51, 58, 66, 68, 70, 71}),
+    "Black Sea": ("Black Sea Region", "BLS", {5, 8, 14, 19, 28, 29, 37, 52, 53, 55, 57, 60, 61, 67, 69, 74, 78, 81}),
+    "Eastern Anatolia": ("Eastern Anatolia Region", "EAN", {4, 12, 13, 23, 24, 25, 30, 36, 44, 49, 62, 65, 75, 76}),
+    "Southeastern Anatolia": ("Southeastern Anatolia Region", "SEA", {2, 21, 27, 47, 56, 63, 72, 73, 79}),
+}
+
+# Philippines: NE `region_cod` (outdated names) -> current administrative regions
+PHL_REGIONS = {
+    "PH-00": ("Metro Manila", "NCR"),
+    "PH-01": ("Ilocos Region", "ILO"),
+    "PH-02": ("Cagayan Valley", "CAG"),
+    "PH-03": ("Central Luzon", "CLZ"),
+    "PH-40": ("Calabarzon", "CAL"),
+    "PH-41": ("Mimaropa", "MIM"),
+    "PH-05": ("Bicol Region", "BIC"),
+    "PH-06": ("Western Visayas", "WVI"),
+    "PH-07": ("Central Visayas", "CVI"),
+    "PH-08": ("Eastern Visayas", "EVI"),
+    "PH-09": ("Zamboanga Peninsula", "ZAM"),
+    "PH-10": ("Northern Mindanao", "NMI"),
+    "PH-11": ("Davao Region", "DAV"),
+    "PH-12": ("Soccsksargen", "SOC"),
+    "PH-13": ("Caraga", "CRG"),
+    "PH-14": ("Bangsamoro (BARMM)", "BAR"),
+    "PH-15": ("Cordillera (CAR)", "CAR"),
+}
+
+
+def phl_region_key(props):
+    return props.get("region_cod") if props.get("region_cod") in PHL_REGIONS else None
+
+
+def rus_district_key(props):
+    name = props.get("name")
+    if not name or name == "None":
+        return None
+    if name in RUS_SOUTHERN:
+        return "Southern"
+    if name in RUS_NORTH_CAUCASIAN:
+        return "North Caucasian"
+    if name in RUS_FAR_EASTERN_EXTRA:
+        return "Far Eastern"
+    return props.get("region")
+
+
+def tur_region_key(props):
+    iso = props.get("iso_3166_2") or ""
+    try:
+        plate = int(iso.split("-")[-1])
+    except ValueError:
+        return None
+    for key, (_, _, plates) in TUR_REGIONS.items():
+        if plate in plates:
+            return key
+    return None
 
 CUSTOM_COUNTRY_MAP = {
     "united states": "USA", "usa": "USA", "england": "GBR", "scotland": "GBR", "wales": "GBR",
@@ -241,6 +334,39 @@ def build_regions(ne_data):
                         "name": display_name,
                         "state_name": display_name,
                         "state_code": state_code,
+                        "country": country_name,
+                        "country_code": country_code,
+                        "continent": continent,
+                        "type": "state",
+                    },
+                    "geometry": round_coords(simplified, precision=3),
+                })
+        elif country_code in ("RUS", "TUR", "PHL"):
+            key_fn = {"RUS": rus_district_key, "TUR": tur_region_key, "PHL": phl_region_key}[country_code]
+            tolerance = 0.05 if country_code == "RUS" else 0.012
+            by_group = {}
+            for f in country_ne_feats:
+                key = key_fn(f["properties"])
+                if key and f.get("geometry"):
+                    by_group.setdefault(key, []).append(shape(f["geometry"]))
+
+            for key, geoms in by_group.items():
+                merged = unary_union(geoms)
+                simplified = merged.simplify(tolerance, preserve_topology=True)
+                if simplified.is_empty:
+                    continue
+                if country_code == "RUS":
+                    display_name, code = RUS_DISTRICTS[key]
+                elif country_code == "PHL":
+                    display_name, code = PHL_REGIONS[key]
+                else:
+                    display_name, code, _ = TUR_REGIONS[key]
+                out_features.append({
+                    "type": "Feature",
+                    "properties": {
+                        "name": display_name,
+                        "state_name": display_name,
+                        "state_code": code,
                         "country": country_name,
                         "country_code": country_code,
                         "continent": continent,

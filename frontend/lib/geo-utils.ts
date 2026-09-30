@@ -217,10 +217,30 @@ export function calculateFeatureCenter(geometry: Geometry): [number, number] {
       updateBounds(pt as [number, number]);
     }
   } else if (geometry.type === "MultiPolygon") {
+    // Use the largest part only, so far-flung islands or antimeridian-crossing
+    // parts (e.g. Chukotka, Easter Island) don't drag the center away
+    let largestArea = -1;
+    let largestRing: number[][] = [];
     for (const poly of geometry.coordinates) {
-      for (const pt of poly[0]) {
-        updateBounds(pt as [number, number]);
+      const ring = poly[0];
+      let ringMinLng = Infinity;
+      let ringMaxLng = -Infinity;
+      let ringMinLat = Infinity;
+      let ringMaxLat = -Infinity;
+      for (const [lng, lat] of ring) {
+        if (lng < ringMinLng) ringMinLng = lng;
+        if (lng > ringMaxLng) ringMaxLng = lng;
+        if (lat < ringMinLat) ringMinLat = lat;
+        if (lat > ringMaxLat) ringMaxLat = lat;
       }
+      const area = (ringMaxLng - ringMinLng) * (ringMaxLat - ringMinLat);
+      if (area > largestArea) {
+        largestArea = area;
+        largestRing = ring;
+      }
+    }
+    for (const pt of largestRing) {
+      updateBounds(pt as [number, number]);
     }
   }
 

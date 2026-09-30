@@ -37,6 +37,11 @@ const COUNTRY_SUBDIVISIONS: Record<
   COL: { count: 33, label: "departments", shortLabel: "dep" },
   IDN: { count: 33, label: "provinces", shortLabel: "prov" },
   POL: { count: 16, label: "voivodeships", shortLabel: "voiv" },
+  RUS: { count: 8, label: "federal districts", shortLabel: "dist" },
+  TUR: { count: 7, label: "regions", shortLabel: "reg" },
+  CHL: { count: 16, label: "regions", shortLabel: "reg" },
+  PHL: { count: 17, label: "regions", shortLabel: "reg" },
+  MYS: { count: 16, label: "states/terr", shortLabel: "states" },
 };
 
 const CONTINENT_COUNTRY_COUNTS: Record<string, number> = {
