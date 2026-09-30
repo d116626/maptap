@@ -4,6 +4,7 @@ import type { Feature } from "geojson";
 
 export type BaseMapId =
   | "esri_satellite"
+  | "esri_satellite_vivid"
   | "nasa_night"
   | "natgeo"
   | "shaded_relief"
@@ -105,6 +106,7 @@ export interface TrainingSettings {
   showRegionNames?: boolean;
   showCityNames?: boolean;
   showPhysical?: boolean;
+  showRivers?: boolean;
   overlayProvider?: OverlayProvider;
   soundEnabled: boolean;
   scopeCountry: string; // "ALL" | "BRA" | "USA" | "EUR"

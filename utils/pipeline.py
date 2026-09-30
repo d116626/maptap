@@ -19,6 +19,7 @@ from utils.data_sources.cities_seed import CITIES_SEED
 from utils.processors.borders import (
     process_brazil_states_geojson,
     process_countries_geojson,
+    process_rivers_geojson,
 )
 from utils.processors.geojson import save_geojson
 from utils.schemas import (
@@ -115,6 +116,11 @@ def run_pipeline() -> None:
         process_brazil_states_geojson()
     except Exception as exc:
         print(f"Warning: Failed to process brazil states geojson: {exc}")
+
+    try:
+        process_rivers_geojson()
+    except Exception as exc:
+        print(f"Warning: Failed to process rivers geojson: {exc}")
 
     print("\n--- [3/3] Exporting auxiliary points ---")
     export_sample_points()

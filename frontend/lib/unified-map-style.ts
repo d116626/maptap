@@ -1,4 +1,8 @@
-import type { LayerSpecification, StyleSpecification } from "maplibre-gl";
+import type {
+  LayerSpecification,
+  RasterLayerSpecification,
+  StyleSpecification,
+} from "maplibre-gl";
 import type { BaseMapId, BaseMapOption, TrainingSettings } from "@/types/map";
 import mapboxOverlayLayers from "./mapbox-overlay-layers.json";
 
@@ -9,6 +13,13 @@ export const BASEMAP_OPTIONS: BaseMapOption[] = [
     category: "Satellite",
     description: "Pure orbital imagery without visual distractions",
     icon: "🛰️",
+  },
+  {
+    id: "esri_satellite_vivid",
+    name: "Vivid Satellite",
+    category: "Satellite",
+    description: "Satellite with boosted color, contrast and terrain shading",
+    icon: "🌍",
   },
   {
     id: "nasa_night",
@@ -63,14 +74,31 @@ export const BASEMAP_OPTIONS: BaseMapOption[] = [
 
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
+const ESRI_IMAGERY_TILES = [
+  "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+];
+
+// Per-basemap raster paint tweaks (same tiles, different "flavor")
+const BASEMAP_PAINT: Partial<Record<BaseMapId, RasterLayerSpecification["paint"]>> = {
+  esri_satellite_vivid: {
+    "raster-saturation": 0.35,
+    "raster-contrast": 0.2,
+    "raster-brightness-min": 0.04,
+  },
+};
+
 const RASTER_TILE_SOURCES: Record<
   BaseMapId,
   { tiles: string[]; tileSize: number; maxzoom: number; attribution: string }
 > = {
   esri_satellite: {
-    tiles: [
-      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    ],
+    tiles: ESRI_IMAGERY_TILES,
+    tileSize: 256,
+    maxzoom: 19,
+    attribution: "Tiles &copy; Esri, Maxar, Earthstar Geographics",
+  },
+  esri_satellite_vivid: {
+    tiles: ESRI_IMAGERY_TILES,
     tileSize: 256,
     maxzoom: 19,
     attribution: "Tiles &copy; Esri, Maxar, Earthstar Geographics",
@@ -229,9 +257,26 @@ export function buildUnifiedMapLibreStyle(
       },
       paint: {
         "raster-opacity": 1.0,
+        ...BASEMAP_PAINT[id as BaseMapId],
       },
     });
   }
+
+  // Terrain shading that emphasizes mountains on top of the vivid satellite flavor
+  layers.push({
+    id: "vivid-hillshade",
+    type: "hillshade",
+    source: "terrain-dem-source",
+    layout: {
+      visibility: settings.baseMap === "esri_satellite_vivid" ? "visible" : "none",
+    },
+    paint: {
+      "hillshade-exaggeration": 0.6,
+      "hillshade-shadow-color": "rgba(0, 0, 0, 0.55)",
+      "hillshade-highlight-color": "rgba(255, 255, 255, 0.3)",
+      "hillshade-accent-color": "rgba(0, 0, 0, 0.3)",
+    },
+  });
 
   // 2. Overlays - Esri Reference and Mapbox Streets
   const provider = settings.overlayProvider || (mapboxToken ? "mapbox" : "esri");

@@ -319,6 +319,9 @@ export function MapView() {
   );
   const [countriesGeoJSON, setCountriesGeoJSON] =
     useState<FeatureCollection | null>(null);
+  const [riversGeoJSON, setRiversGeoJSON] = useState<FeatureCollection | null>(
+    null
+  );
 
   const [target, setTarget] = useState<TargetEntity | null>(null);
   const [guessResult, setGuessResult] = useState<GuessResult | null>(null);
@@ -449,6 +452,17 @@ export function MapView() {
 
     loadData();
   }, []);
+
+  // Rivers overlay is fetched lazily the first time it is enabled
+  const showRivers = settings.showRivers ?? false;
+  useEffect(() => {
+    if (!showRivers || riversGeoJSON) return;
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+    fetch(`${basePath}/data/rivers.geojson?v=20260930`)
+      .then((res) => (res.ok ? (res.json() as Promise<FeatureCollection>) : null))
+      .then((data) => data && setRiversGeoJSON(data))
+      .catch((err) => console.error("Failed to load rivers:", err));
+  }, [showRivers, riversGeoJSON]);
 
   // Filter cities by active scope and dataset pool
   const eligibleCities = useMemo(() => {
@@ -1003,6 +1017,66 @@ export function MapView() {
               />
             </Source>
           )}
+
+        {/* Rivers (Natural Earth): linhas + nomes ao longo do curso */}
+        {showRivers && riversGeoJSON && (
+          <Source id="rivers-source" type="geojson" data={riversGeoJSON}>
+            <Layer
+              id="rivers-line"
+              type="line"
+              layout={{ "line-cap": "round", "line-join": "round" }}
+              paint={{
+                "line-color": "#38bdf8",
+                "line-opacity": 0.9,
+                "line-width": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  1,
+                  ["case", ["<=", ["get", "rank"], 3], 0.8, 0.4],
+                  6,
+                  ["case", ["<=", ["get", "rank"], 3], 2.5, 1.2],
+                  10,
+                  ["case", ["<=", ["get", "rank"], 3], 4, 2],
+                ],
+              }}
+            />
+            <Layer
+              id="rivers-labels"
+              type="symbol"
+              minzoom={2}
+              filter={["!=", ["get", "name"], ""]}
+              layout={{
+                "symbol-placement": "line",
+                "text-field": ["get", "name"],
+                "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"],
+                "text-size": [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  2,
+                  11,
+                  6,
+                  14,
+                  10,
+                  18,
+                ],
+                "text-letter-spacing": 0.08,
+                // Repeat often so a name is always near the viewport center, at any zoom
+                "symbol-spacing": 160,
+                "text-max-angle": 70,
+                "text-padding": 2,
+                // Biggest rivers win collisions
+                "symbol-sort-key": ["get", "rank"],
+              }}
+              paint={{
+                "text-color": "#e0f2fe",
+                "text-halo-color": "#0c4a6e",
+                "text-halo-width": 2,
+              }}
+            />
+          </Source>
+        )}
 
         {/* 1. Highlight da Região Alvo (Outline Nítido + Preenchimento Quase 100% Transparente) */}
         {guessResult && targetRegionGeoJSON && (

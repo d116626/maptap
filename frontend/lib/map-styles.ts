@@ -8,7 +8,7 @@ export const ESRI_LABELS_OVERLAY_TILES = [
   "https://a.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}@2x.png",
 ];
 
-export const BASEMAP_STYLES: Record<BaseMapId, BaseMapOption> = {
+export const BASEMAP_STYLES: Partial<Record<BaseMapId, BaseMapOption>> = {
   esri_satellite: {
     id: "esri_satellite",
     name: "Esri Satellite",

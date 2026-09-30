@@ -102,6 +102,7 @@ export const DEFAULT_TRAINING_SETTINGS: TrainingSettings = {
   showRegionNames: false,
   showCityNames: false,
   showPhysical: false,
+  showRivers: false,
   overlayProvider: "mapbox",
   soundEnabled: true,
   scopeCountry: "ALL", // Whole World default

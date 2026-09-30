@@ -16,6 +16,7 @@ import {
   Mountain,
   Route,
   SkipForward,
+  Waves,
   Trees,
   X,
 } from "lucide-react";
@@ -52,16 +53,18 @@ export function BottomControlsDock({
   const isCitiesActive =
     settings.showCityNames ?? settings.showPlaceNames ?? false;
   const isPhysicalActive = settings.showPhysical ?? false;
+  const isRiversActive = settings.showRivers ?? false;
 
   const activeLayersCount =
-    currentProvider === "esri"
+    (isRiversActive ? 1 : 0) +
+    (currentProvider === "esri"
       ? (isRoadsActive ? 1 : 0) + (isBordersActive ? 1 : 0)
       : (isBordersActive ? 1 : 0) +
         (isCountryActive ? 1 : 0) +
         (isRegionsActive ? 1 : 0) +
         (isCitiesActive ? 1 : 0) +
         (isRoadsActive ? 1 : 0) +
-        (isPhysicalActive ? 1 : 0);
+        (isPhysicalActive ? 1 : 0));
 
   const toggleLayer = (
     key:
@@ -353,6 +356,28 @@ export function BottomControlsDock({
                       </div>
                     </div>
                   )}
+
+                  {/* Rivers (Natural Earth, independente da fonte) */}
+                  <div
+                    onClick={() => onUpdateSettings({ showRivers: !isRiversActive })}
+                    className="flex items-center justify-between px-2 py-1.5 rounded-xl hover:bg-white/5 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Waves className="size-3.5 text-blue-400" />
+                      <span className="text-xs font-medium text-foreground">Rivers</span>
+                    </div>
+                    <div
+                      className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                        isRiversActive ? "bg-primary" : "bg-muted-foreground/30"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block size-3 transform rounded-full bg-white shadow-sm transition duration-200 ease-in-out ${
+                          isRiversActive ? "translate-x-3" : "translate-x-0"
+                        }`}
+                      />
+                    </div>
+                  </div>
                 </div>
               </>
             )}

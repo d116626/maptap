@@ -125,3 +125,41 @@ def process_brazil_states_geojson() -> Optional[Path]:
         
     print(f"Exported brazil_states.geojson ({len(gdf)} states, {len(json_bytes) / 1024:.1f} KB)")
     return output_path
+
+
+RIVERS_URL = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_rivers_lake_centerlines.geojson"
+RIVERS_MAX_SCALERANK = 7  # 1 = largest rivers; <=7 keeps ~650 major rivers (~0.5 MB)
+
+
+def process_rivers_geojson() -> Optional[Path]:
+    """Download Natural Earth rivers, keep major ones, simplify and export as GeoJSON."""
+    raw_path = fetch_file_if_missing(RIVERS_URL, RAW_DIR / "rivers_raw.geojson")
+
+    gdf = gpd.read_file(raw_path)
+    gdf = gdf[(gdf["featurecla"] == "River") & (gdf["scalerank"] <= RIVERS_MAX_SCALERANK)].copy()
+
+    name_en = gdf["name_en"] if "name_en" in gdf.columns else gdf["name"]
+    gdf["name"] = name_en.fillna(gdf["name"]).fillna("")
+    gdf["min_zoom"] = gdf["min_zoom"].fillna(0)
+    gdf["rank"] = gdf["scalerank"].astype(int)
+
+    gdf["geometry"] = gdf["geometry"].simplify(tolerance=0.02, preserve_topology=False).set_precision(0.01)
+    gdf = gdf[~gdf["geometry"].is_empty]
+    gdf = gdf[["name", "min_zoom", "rank", "geometry"]]
+
+    json_bytes = gdf.to_json(drop_id=True).encode("utf-8")
+    if len(json_bytes) > GITHUB_MAX_FILE_SIZE_BYTES:
+        print("[ALERTA] Rivers GeoJSON ultrapassou o limite do GitHub!")
+        return None
+
+    PROCESS_DIR.mkdir(parents=True, exist_ok=True)
+    FRONTEND_PUBLIC_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    with open(PROCESS_DIR / "rivers.geojson", "wb") as f:
+        f.write(json_bytes)
+    output_path = FRONTEND_PUBLIC_DATA_DIR / "rivers.geojson"
+    with open(output_path, "wb") as f:
+        f.write(json_bytes)
+
+    print(f"Exported rivers.geojson ({len(gdf)} rivers, {len(json_bytes) / 1024:.1f} KB)")
+    return output_path
