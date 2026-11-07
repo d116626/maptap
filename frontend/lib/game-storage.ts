@@ -109,6 +109,7 @@ export const DEFAULT_TRAINING_SETTINGS: TrainingSettings = {
   cityPool: "all",
   maptapOnly: true, // MapTap Base active by default
   terrain3D: false,
+  preventRotation: true,
 };
 
 const SETTINGS_STORAGE_KEY = "maptap_training_settings_v1";

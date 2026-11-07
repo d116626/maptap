@@ -381,6 +381,27 @@ export function MapView() {
     }
   }, [settings.terrain3D]);
 
+  // Lock/unlock map rotation (mouse, touch and keyboard); re-aligns north when locked
+  const preventRotation = settings.preventRotation ?? true;
+  const applyRotationLock = useCallback(() => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+    if (preventRotation) {
+      map.dragRotate.disable();
+      map.touchZoomRotate.disableRotation();
+      map.keyboard.disableRotation();
+      if (map.getBearing() !== 0) map.easeTo({ bearing: 0, duration: 400 });
+    } else {
+      map.dragRotate.enable();
+      map.touchZoomRotate.enableRotation();
+      map.keyboard.enableRotation();
+    }
+  }, [preventRotation]);
+
+  useEffect(() => {
+    applyRotationLock();
+  }, [applyRotationLock]);
+
   // Load public static datasets & initialize first target
   useEffect(() => {
     async function loadData() {
@@ -970,6 +991,8 @@ export function MapView() {
         ref={mapRef}
         initialViewState={initialViewState}
         maxPitch={85}
+        dragRotate={!preventRotation}
+        onLoad={applyRotationLock}
         onClick={handleMapClick}
         mapLib={maplibregl}
         mapStyle={mapStyleSpec}

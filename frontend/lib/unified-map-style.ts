@@ -29,6 +29,13 @@ export const BASEMAP_OPTIONS: BaseMapOption[] = [
     icon: "🌃",
   },
   {
+    id: "population_density",
+    name: "Population Density",
+    category: "Thematic",
+    description: "Where people live: persons per km² (GPW 2020)",
+    icon: "👥",
+  },
+  {
     id: "shaded_relief",
     name: "3D Shaded Relief",
     category: "Relief",
@@ -89,7 +96,14 @@ const BASEMAP_PAINT: Partial<Record<BaseMapId, RasterLayerSpecification["paint"]
 
 const RASTER_TILE_SOURCES: Record<
   BaseMapId,
-  { tiles: string[]; tileSize: number; maxzoom: number; attribution: string }
+  {
+    tiles: string[];
+    tileSize: number;
+    maxzoom: number;
+    // Keep drawing (overzoomed) past the source's maxzoom instead of disappearing
+    layerMaxzoom?: number;
+    attribution: string;
+  }
 > = {
   esri_satellite: {
     tiles: ESRI_IMAGERY_TILES,
@@ -110,6 +124,16 @@ const RASTER_TILE_SOURCES: Record<
     tileSize: 256,
     maxzoom: 8,
     attribution: "NASA Earth Observatory / NOAA",
+  },
+  population_density: {
+    tiles: [
+      "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GPW_Population_Density_2020/default/default/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png",
+    ],
+    tileSize: 256,
+    maxzoom: 7,
+    layerMaxzoom: 24,
+    attribution:
+      "Population density &copy; NASA SEDAC GPWv4 (CIESIN, Columbia Univ.) via NASA GIBS",
   },
   shaded_relief: {
     tiles: [
@@ -234,6 +258,16 @@ export function buildUnifiedMapLibreStyle(
   const sources: StyleSpecification["sources"] = {};
   const layers: StyleSpecification["layers"] = [];
 
+  // Dark backdrop for transparent thematic tiles (oceans / no-data areas)
+  layers.push({
+    id: "basemap-backdrop-population",
+    type: "background",
+    layout: {
+      visibility: settings.baseMap === "population_density" ? "visible" : "none",
+    },
+    paint: { "background-color": "#0b1d3a" },
+  });
+
   // 1. Declare all Basemap sources and layers
   for (const [id, config] of Object.entries(RASTER_TILE_SOURCES)) {
     const sourceId = `basemap-source-${id}`;
@@ -251,7 +285,7 @@ export function buildUnifiedMapLibreStyle(
       type: "raster",
       source: sourceId,
       minzoom: 0,
-      maxzoom: config.maxzoom,
+      maxzoom: config.layerMaxzoom ?? config.maxzoom,
       layout: {
         visibility: isVisible ? "visible" : "none",
       },

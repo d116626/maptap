@@ -13,6 +13,7 @@ import {
   Globe,
   Landmark,
   Layers,
+  Lock,
   Mountain,
   Route,
   SkipForward,
@@ -38,6 +39,7 @@ export function BottomControlsDock({
 }: BottomControlsDockProps) {
   const [styleSelectorOpen, setStyleSelectorOpen] = useState(false);
   const [layersSelectorOpen, setLayersSelectorOpen] = useState(false);
+  const [terrainMenuOpen, setTerrainMenuOpen] = useState(false);
 
   const activeBasemap =
     BASEMAP_OPTIONS.find((b) => b.id === settings.baseMap) ??
@@ -54,6 +56,8 @@ export function BottomControlsDock({
     settings.showCityNames ?? settings.showPlaceNames ?? false;
   const isPhysicalActive = settings.showPhysical ?? false;
   const isRiversActive = settings.showRivers ?? false;
+  const isTerrainActive = settings.terrain3D ?? false;
+  const isRotationLocked = settings.preventRotation ?? true;
 
   const activeLayersCount =
     (isRiversActive ? 1 : 0) +
@@ -108,6 +112,7 @@ export function BottomControlsDock({
             onClick={() => {
               setStyleSelectorOpen(!styleSelectorOpen);
               setLayersSelectorOpen(false);
+              setTerrainMenuOpen(false);
             }}
             className="h-10 w-10 p-0 rounded-xl hover:bg-accent/80 transition-all shrink-0 flex items-center justify-center relative"
             title={`Base Map: ${activeBasemap.name}`}
@@ -125,6 +130,7 @@ export function BottomControlsDock({
               onClick={() => {
                 setLayersSelectorOpen(!layersSelectorOpen);
                 setStyleSelectorOpen(false);
+                setTerrainMenuOpen(false);
               }}
               className={`h-10 w-10 p-0 rounded-xl transition-all shrink-0 flex items-center justify-center relative ${
                 activeLayersCount > 0
@@ -385,29 +391,89 @@ export function BottomControlsDock({
 
           <div className="h-5 w-px bg-border/60 shrink-0" />
 
-          {/* 3. 3D Terrain Elevation Toggle */}
-          <Button
-            variant={settings.terrain3D ? "default" : "ghost"}
-            size="sm"
-            onClick={() =>
-              onUpdateSettings({ terrain3D: !settings.terrain3D })
-            }
-            className={`h-10 w-10 p-0 rounded-xl transition-all shrink-0 flex items-center justify-center relative ${
-              settings.terrain3D
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-            title={
-              settings.terrain3D
-                ? "Disable 3D Terrain"
-                : "Enable 3D Terrain Elevation (Mountains & Relief)"
-            }
-          >
-            <Mountain className="size-4" />
-            {settings.terrain3D && (
-              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-emerald-400" />
+          {/* 3. View Options Dropdown (3D elevation + rotation lock) */}
+          <div className="relative">
+            <Button
+              variant={isTerrainActive ? "default" : "ghost"}
+              size="sm"
+              onClick={() => {
+                setTerrainMenuOpen(!terrainMenuOpen);
+                setStyleSelectorOpen(false);
+                setLayersSelectorOpen(false);
+              }}
+              className={`h-10 w-10 p-0 rounded-xl transition-all shrink-0 flex items-center justify-center relative ${
+                isTerrainActive
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              title="View Options (3D Elevation, Rotation)"
+            >
+              <Mountain className="size-4" />
+              {isTerrainActive && (
+                <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-emerald-400" />
+              )}
+            </Button>
+
+            {terrainMenuOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setTerrainMenuOpen(false)}
+                />
+
+                <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-56 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
+                  <div className="space-y-0.5">
+                    <div
+                      onClick={() => onUpdateSettings({ terrain3D: !isTerrainActive })}
+                      className="flex items-center justify-between px-2 py-1.5 rounded-xl hover:bg-white/5 cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Mountain className="size-3.5 text-emerald-400" />
+                        <div>
+                          <p className="text-xs font-medium text-foreground leading-tight">3D Elevation</p>
+                          <p className="text-[9px] text-muted-foreground leading-none">Mountains & relief</p>
+                        </div>
+                      </div>
+                      <div
+                        className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                          isTerrainActive ? "bg-primary" : "bg-muted-foreground/30"
+                        }`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block size-3 transform rounded-full bg-white shadow-sm transition duration-200 ease-in-out ${
+                            isTerrainActive ? "translate-x-3" : "translate-x-0"
+                          }`}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => onUpdateSettings({ preventRotation: !isRotationLocked })}
+                      className="flex items-center justify-between px-2 py-1.5 rounded-xl hover:bg-white/5 cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Lock className="size-3.5 text-sky-400" />
+                        <div>
+                          <p className="text-xs font-medium text-foreground leading-tight">Lock Rotation</p>
+                          <p className="text-[9px] text-muted-foreground leading-none">Keep north up</p>
+                        </div>
+                      </div>
+                      <div
+                        className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                          isRotationLocked ? "bg-primary" : "bg-muted-foreground/30"
+                        }`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block size-3 transform rounded-full bg-white shadow-sm transition duration-200 ease-in-out ${
+                            isRotationLocked ? "translate-x-3" : "translate-x-0"
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
-          </Button>
+          </div>
 
           <div className="h-5 w-px bg-border/60 shrink-0" />
 

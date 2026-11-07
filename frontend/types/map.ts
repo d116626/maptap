@@ -6,6 +6,7 @@ export type BaseMapId =
   | "esri_satellite"
   | "esri_satellite_vivid"
   | "nasa_night"
+  | "population_density"
   | "natgeo"
   | "shaded_relief"
   | "esri_topo"
@@ -115,6 +116,7 @@ export interface TrainingSettings {
   cityPool: CityPoolMode;
   maptapOnly?: boolean;
   terrain3D?: boolean;
+  preventRotation?: boolean;
   datasetPool?: CityPoolMode;
 }
 
