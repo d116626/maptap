@@ -92,6 +92,12 @@ const BASEMAP_PAINT: Partial<Record<BaseMapId, RasterLayerSpecification["paint"]
     "raster-contrast": 0.2,
     "raster-brightness-min": 0.04,
   },
+  // min > max inverts each channel: the light cream -> dark red ramp becomes
+  // dark navy -> cyan, so sparse areas fade into the night and cities glow
+  population_density: {
+    "raster-brightness-min": 1,
+    "raster-brightness-max": 0,
+  },
 };
 
 const RASTER_TILE_SOURCES: Record<
@@ -265,7 +271,7 @@ export function buildUnifiedMapLibreStyle(
     layout: {
       visibility: settings.baseMap === "population_density" ? "visible" : "none",
     },
-    paint: { "background-color": "#0b1d3a" },
+    paint: { "background-color": "#030a18" },
   });
 
   // 1. Declare all Basemap sources and layers
