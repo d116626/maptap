@@ -1,0 +1,327 @@
+{
+ "country_code": "USA",
+ "title": "USA tips",
+ "sections": [
+  {
+   "id": "divisions",
+   "title": "9 divisions",
+   "items": [
+    {
+     "label": "New England",
+     "text": "Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, Vermont",
+     "regions": [
+      "@CT",
+      "@ME",
+      "@MA",
+      "@NH",
+      "@RI",
+      "@VT"
+     ]
+    },
+    {
+     "label": "Mid-Atlantic",
+     "text": "New Jersey, New York, Pennsylvania",
+     "regions": [
+      "@NJ",
+      "@NY",
+      "@PA"
+     ]
+    },
+    {
+     "label": "South Atlantic",
+     "text": "Delaware, D.C., Florida, Georgia, Maryland, North Carolina, South Carolina, Virginia, West Virginia",
+     "regions": [
+      "@DE",
+      "@DC",
+      "@FL",
+      "@GA",
+      "@MD",
+      "@NC",
+      "@SC",
+      "@VA",
+      "@WV"
+     ]
+    },
+    {
+     "label": "East South Central",
+     "text": "Alabama, Kentucky, Mississippi, Tennessee",
+     "regions": [
+      "@AL",
+      "@KY",
+      "@MS",
+      "@TN"
+     ]
+    },
+    {
+     "label": "West South Central",
+     "text": "Arkansas, Louisiana, Oklahoma, Texas",
+     "regions": [
+      "@AR",
+      "@LA",
+      "@OK",
+      "@TX"
+     ]
+    },
+    {
+     "label": "Midwest (East North Central)",
+     "text": "Illinois, Indiana, Michigan, Ohio, Wisconsin",
+     "regions": [
+      "@IL",
+      "@IN",
+      "@MI",
+      "@OH",
+      "@WI"
+     ]
+    },
+    {
+     "label": "Midwest (West North Central)",
+     "text": "Iowa, Kansas, Minnesota, Missouri, Nebraska, North Dakota, South Dakota",
+     "regions": [
+      "@IA",
+      "@KS",
+      "@MN",
+      "@MO",
+      "@NE",
+      "@ND",
+      "@SD"
+     ]
+    },
+    {
+     "label": "Mountain",
+     "text": "Arizona, Colorado, Idaho, Montana, Nevada, New Mexico, Utah, Wyoming",
+     "regions": [
+      "@AZ",
+      "@CO",
+      "@ID",
+      "@MT",
+      "@NV",
+      "@NM",
+      "@UT",
+      "@WY"
+     ]
+    },
+    {
+     "label": "Pacific",
+     "text": "Alaska, California, Hawaii, Oregon, Washington",
+     "regions": [
+      "@AK",
+      "@CA",
+      "@HI",
+      "@OR",
+      "@WA"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "patterns",
+   "title": "Patterns",
+   "items": [
+    {
+     "label": "North / South",
+     "text": "Dakotas, Carolinas",
+     "regions": [
+      "@ND",
+      "@SD",
+      "@NC",
+      "@SC"
+     ]
+    },
+    {
+     "label": "Virginia / West Virginia",
+     "text": "West Virginia split off in 1863",
+     "regions": [
+      "@VA",
+      "@WV"
+     ]
+    },
+    {
+     "label": "New ...",
+     "text": "New York, New Jersey, New Hampshire, New Mexico",
+     "regions": [
+      "@NY",
+      "@NJ",
+      "@NH",
+      "@NM"
+     ]
+    },
+    {
+     "label": "Great Lakes (8)",
+     "text": "Minnesota, Wisconsin, Illinois, Indiana, Michigan, Ohio, Pennsylvania, New York",
+     "regions": [
+      "@MN",
+      "@WI",
+      "@IL",
+      "@IN",
+      "@MI",
+      "@OH",
+      "@PA",
+      "@NY"
+     ]
+    },
+    {
+     "label": "Mississippi River (10)",
+     "text": "Minnesota, Wisconsin, Iowa, Illinois, Missouri, Kentucky, Tennessee, Arkansas, Mississippi, Louisiana",
+     "regions": [
+      "@MN",
+      "@WI",
+      "@IA",
+      "@IL",
+      "@MO",
+      "@KY",
+      "@TN",
+      "@AR",
+      "@MS",
+      "@LA"
+     ]
+    },
+    {
+     "label": "Gulf Coast (5)",
+     "text": "Texas, Louisiana, Mississippi, Alabama, Florida",
+     "regions": [
+      "@TX",
+      "@LA",
+      "@MS",
+      "@AL",
+      "@FL"
+     ]
+    },
+    {
+     "label": "Mexico border (4)",
+     "text": "California, Arizona, New Mexico, Texas",
+     "regions": [
+      "@CA",
+      "@AZ",
+      "@NM",
+      "@TX"
+     ]
+    },
+    {
+     "label": "Original 13",
+     "text": "New Hampshire, Massachusetts, Rhode Island, Connecticut, New York, New Jersey, Pennsylvania, Delaware, Maryland, Virginia, North Carolina, South Carolina, Georgia",
+     "regions": [
+      "@NH",
+      "@MA",
+      "@RI",
+      "@CT",
+      "@NY",
+      "@NJ",
+      "@PA",
+      "@DE",
+      "@MD",
+      "@VA",
+      "@NC",
+      "@SC",
+      "@GA"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "confusable",
+   "title": "Easy to confuse",
+   "items": [
+    {
+     "label": "Idaho / Iowa / Ohio",
+     "text": "northwest mountains / west of the Mississippi / east, on Lake Erie",
+     "regions": [
+      "@ID",
+      "@IA",
+      "@OH"
+     ]
+    },
+    {
+     "label": "Illinois / Indiana",
+     "text": "Illinois is west, with Chicago; Indiana is east of it",
+     "regions": [
+      "@IL",
+      "@IN"
+     ]
+    },
+    {
+     "label": "Kansas / Arkansas",
+     "text": "central plains / east of Oklahoma, on the Mississippi",
+     "regions": [
+      "@KS",
+      "@AR"
+     ]
+    },
+    {
+     "label": "Minnesota / Missouri / Mississippi",
+     "text": "north / center / south, on the Gulf",
+     "regions": [
+      "@MN",
+      "@MO",
+      "@MS"
+     ]
+    },
+    {
+     "label": "Washington",
+     "text": "the state is in the northwest; D.C. is between Maryland and Virginia",
+     "regions": [
+      "@WA",
+      "@DC"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "anchors",
+   "title": "Visual anchors",
+   "items": [
+    {
+     "label": "Alaska",
+     "text": "largest state",
+     "regions": [
+      "@AK"
+     ]
+    },
+    {
+     "label": "Texas",
+     "text": "largest of the lower 48",
+     "regions": [
+      "@TX"
+     ]
+    },
+    {
+     "label": "Rhode Island",
+     "text": "smallest state",
+     "regions": [
+      "@RI"
+     ]
+    },
+    {
+     "label": "Hawaii",
+     "text": "the only island state",
+     "regions": [
+      "@HI"
+     ]
+    },
+    {
+     "label": "Four Corners",
+     "text": "AZ, CO, NM, UT meet at one point",
+     "regions": [
+      "@AZ",
+      "@CO",
+      "@NM",
+      "@UT"
+     ]
+    },
+    {
+     "label": "Florida",
+     "text": "the big peninsula in the southeast",
+     "regions": [
+      "@FL"
+     ]
+    },
+    {
+     "label": "Maine",
+     "text": "northeasternmost state",
+     "regions": [
+      "@ME"
+     ]
+    }
+   ]
+  }
+ ]
+}

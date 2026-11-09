@@ -1,0 +1,429 @@
+{
+ "country_code": "JPN",
+ "title": "Japan tips",
+ "sections": [
+  {
+   "id": "endings",
+   "title": "Name endings",
+   "items": [
+    {
+     "label": "都 to",
+     "text": "Tokyo, the only metropolis",
+     "regions": [
+      "Tokyo"
+     ]
+    },
+    {
+     "label": "道 dō",
+     "text": "Hokkaidō, the only circuit",
+     "regions": [
+      "Hokkaidō"
+     ]
+    },
+    {
+     "label": "府 fu",
+     "text": "Ōsaka and Kyōto, urban prefectures",
+     "regions": [
+      "Ōsaka Prefecture",
+      "Kyōto Prefecture"
+     ]
+    },
+    {
+     "label": "県 ken",
+     "text": "the other 43 prefectures",
+     "regions": [
+      "Aomori Prefecture",
+      "Iwate Prefecture",
+      "Miyagi Prefecture",
+      "Akita Prefecture",
+      "Yamagata Prefecture",
+      "Fukushima Prefecture",
+      "Ibaraki Prefecture",
+      "Tochigi Prefecture",
+      "Gunma Prefecture",
+      "Saitama Prefecture",
+      "Chiba Prefecture",
+      "Kanagawa Prefecture",
+      "Niigata Prefecture",
+      "Toyama Prefecture",
+      "Ishikawa Prefecture",
+      "Fukui Prefecture",
+      "Yamanashi Prefecture",
+      "Nagano Prefecture",
+      "Gifu Prefecture",
+      "Shizuoka Prefecture",
+      "Aichi Prefecture",
+      "Mie Prefecture",
+      "Shiga Prefecture",
+      "Hyōgo Prefecture",
+      "Nara Prefecture",
+      "Wakayama Prefecture",
+      "Tottori Prefecture",
+      "Shimane Prefecture",
+      "Okayama Prefecture",
+      "Hiroshima Prefecture",
+      "Yamaguchi Prefecture",
+      "Tokushima Prefecture",
+      "Kagawa Prefecture",
+      "Ehime Prefecture",
+      "Kōchi Prefecture",
+      "Fukuoka Prefecture",
+      "Saga Prefecture",
+      "Nagasaki Prefecture",
+      "Kumamoto Prefecture",
+      "Ōita Prefecture",
+      "Miyazaki Prefecture",
+      "Kagoshima Prefecture",
+      "Okinawa Prefecture"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "name-parts",
+   "title": "Name parts",
+   "items": [
+    {
+     "label": "山 yama = mountain",
+     "text": "Toyama, Okayama, Wakayama, Yamagata, Yamaguchi, Yamanashi",
+     "regions": [
+      "Toyama Prefecture",
+      "Okayama Prefecture",
+      "Wakayama Prefecture",
+      "Yamagata Prefecture",
+      "Yamaguchi Prefecture",
+      "Yamanashi Prefecture"
+     ]
+    },
+    {
+     "label": "島 shima = island",
+     "text": "Kagoshima, Fukushima, Hiroshima, Tokushima, Shimane",
+     "regions": [
+      "Kagoshima Prefecture",
+      "Fukushima Prefecture",
+      "Hiroshima Prefecture",
+      "Tokushima Prefecture",
+      "Shimane Prefecture"
+     ]
+    },
+    {
+     "label": "川 kawa = river",
+     "text": "Kanagawa, Ishikawa, Kagawa",
+     "regions": [
+      "Kanagawa Prefecture",
+      "Ishikawa Prefecture",
+      "Kagawa Prefecture"
+     ]
+    },
+    {
+     "label": "崎 saki = cape",
+     "text": "Nagasaki, Miyazaki",
+     "regions": [
+      "Nagasaki Prefecture",
+      "Miyazaki Prefecture"
+     ]
+    },
+    {
+     "label": "東京 Tokyo",
+     "text": "\"eastern capital\"",
+     "regions": [
+      "Tokyo"
+     ]
+    },
+    {
+     "label": "京都 Kyoto",
+     "text": "\"capital city\"",
+     "regions": [
+      "Kyōto Prefecture"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "confusable",
+   "title": "Easy to confuse",
+   "items": [
+    {
+     "label": "Fukui / Fukushima / Fukuoka",
+     "text": "Sea of Japan coast / Tōhoku / Kyūshū",
+     "regions": [
+      "Fukui Prefecture",
+      "Fukushima Prefecture",
+      "Fukuoka Prefecture"
+     ]
+    },
+    {
+     "label": "Yamagata / Yamaguchi / Yamanashi",
+     "text": "Tōhoku / far west of Honshū / central, next to Mt. Fuji",
+     "regions": [
+      "Yamagata Prefecture",
+      "Yamaguchi Prefecture",
+      "Yamanashi Prefecture"
+     ]
+    },
+    {
+     "label": "Kagoshima / Kagawa / Kanagawa",
+     "text": "south Kyūshū / Shikoku / next to Tokyo",
+     "regions": [
+      "Kagoshima Prefecture",
+      "Kagawa Prefecture",
+      "Kanagawa Prefecture"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "regions",
+   "title": "8 regions",
+   "items": [
+    {
+     "label": "Hokkaidō",
+     "text": "the northern island",
+     "regions": [
+      "Hokkaidō"
+     ]
+    },
+    {
+     "label": "Tōhoku",
+     "text": "Aomori, Iwate, Miyagi, Akita, Yamagata, Fukushima",
+     "regions": [
+      "Aomori Prefecture",
+      "Iwate Prefecture",
+      "Miyagi Prefecture",
+      "Akita Prefecture",
+      "Yamagata Prefecture",
+      "Fukushima Prefecture"
+     ]
+    },
+    {
+     "label": "Kantō",
+     "text": "Ibaraki, Tochigi, Gunma, Saitama, Chiba, Tokyo, Kanagawa",
+     "regions": [
+      "Ibaraki Prefecture",
+      "Tochigi Prefecture",
+      "Gunma Prefecture",
+      "Saitama Prefecture",
+      "Chiba Prefecture",
+      "Tokyo",
+      "Kanagawa Prefecture"
+     ]
+    },
+    {
+     "label": "Chūbu",
+     "text": "Niigata, Toyama, Ishikawa, Fukui, Yamanashi, Nagano, Gifu, Shizuoka, Aichi",
+     "regions": [
+      "Niigata Prefecture",
+      "Toyama Prefecture",
+      "Ishikawa Prefecture",
+      "Fukui Prefecture",
+      "Yamanashi Prefecture",
+      "Nagano Prefecture",
+      "Gifu Prefecture",
+      "Shizuoka Prefecture",
+      "Aichi Prefecture"
+     ]
+    },
+    {
+     "label": "Kansai (Kinki)",
+     "text": "Mie, Shiga, Kyoto, Osaka, Hyogo, Nara, Wakayama",
+     "regions": [
+      "Mie Prefecture",
+      "Shiga Prefecture",
+      "Kyōto Prefecture",
+      "Ōsaka Prefecture",
+      "Hyōgo Prefecture",
+      "Nara Prefecture",
+      "Wakayama Prefecture"
+     ]
+    },
+    {
+     "label": "Chūgoku",
+     "text": "Tottori, Shimane, Okayama, Hiroshima, Yamaguchi",
+     "regions": [
+      "Tottori Prefecture",
+      "Shimane Prefecture",
+      "Okayama Prefecture",
+      "Hiroshima Prefecture",
+      "Yamaguchi Prefecture"
+     ]
+    },
+    {
+     "label": "Shikoku",
+     "text": "Tokushima, Kagawa, Ehime, Kochi",
+     "regions": [
+      "Tokushima Prefecture",
+      "Kagawa Prefecture",
+      "Ehime Prefecture",
+      "Kōchi Prefecture"
+     ]
+    },
+    {
+     "label": "Kyūshū + Okinawa",
+     "text": "Fukuoka, Saga, Nagasaki, Kumamoto, Oita, Miyazaki, Kagoshima, Okinawa",
+     "regions": [
+      "Fukuoka Prefecture",
+      "Saga Prefecture",
+      "Nagasaki Prefecture",
+      "Kumamoto Prefecture",
+      "Ōita Prefecture",
+      "Miyazaki Prefecture",
+      "Kagoshima Prefecture",
+      "Okinawa Prefecture"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "region-names",
+   "title": "Region names",
+   "items": [
+    {
+     "label": "Tōhoku",
+     "text": "\"northeast\"",
+     "regions": [
+      "Aomori Prefecture",
+      "Iwate Prefecture",
+      "Miyagi Prefecture",
+      "Akita Prefecture",
+      "Yamagata Prefecture",
+      "Fukushima Prefecture"
+     ]
+    },
+    {
+     "label": "Kantō",
+     "text": "\"east of the barrier\"",
+     "regions": [
+      "Ibaraki Prefecture",
+      "Tochigi Prefecture",
+      "Gunma Prefecture",
+      "Saitama Prefecture",
+      "Chiba Prefecture",
+      "Tokyo",
+      "Kanagawa Prefecture"
+     ]
+    },
+    {
+     "label": "Kansai",
+     "text": "\"west of the barrier\"",
+     "regions": [
+      "Mie Prefecture",
+      "Shiga Prefecture",
+      "Kyōto Prefecture",
+      "Ōsaka Prefecture",
+      "Hyōgo Prefecture",
+      "Nara Prefecture",
+      "Wakayama Prefecture"
+     ]
+    },
+    {
+     "label": "Chūbu",
+     "text": "\"middle part\"",
+     "regions": [
+      "Niigata Prefecture",
+      "Toyama Prefecture",
+      "Ishikawa Prefecture",
+      "Fukui Prefecture",
+      "Yamanashi Prefecture",
+      "Nagano Prefecture",
+      "Gifu Prefecture",
+      "Shizuoka Prefecture",
+      "Aichi Prefecture"
+     ]
+    },
+    {
+     "label": "Chūgoku",
+     "text": "\"middle country\" (not China)",
+     "regions": [
+      "Tottori Prefecture",
+      "Shimane Prefecture",
+      "Okayama Prefecture",
+      "Hiroshima Prefecture",
+      "Yamaguchi Prefecture"
+     ]
+    },
+    {
+     "label": "Shikoku",
+     "text": "\"four countries\"",
+     "regions": [
+      "Tokushima Prefecture",
+      "Kagawa Prefecture",
+      "Ehime Prefecture",
+      "Kōchi Prefecture"
+     ]
+    },
+    {
+     "label": "Kyūshū",
+     "text": "\"nine provinces\"",
+     "regions": [
+      "Fukuoka Prefecture",
+      "Saga Prefecture",
+      "Nagasaki Prefecture",
+      "Kumamoto Prefecture",
+      "Ōita Prefecture",
+      "Miyazaki Prefecture",
+      "Kagoshima Prefecture"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "anchors",
+   "title": "Visual anchors",
+   "items": [
+    {
+     "label": "Hokkaidō",
+     "text": "largest prefecture, northern island",
+     "regions": [
+      "Hokkaidō"
+     ]
+    },
+    {
+     "label": "Okinawa",
+     "text": "far southwest island chain",
+     "regions": [
+      "Okinawa Prefecture"
+     ]
+    },
+    {
+     "label": "Kagawa",
+     "text": "smallest prefecture, on Shikoku",
+     "regions": [
+      "Kagawa Prefecture"
+     ]
+    },
+    {
+     "label": "Greater Tokyo",
+     "text": "Tokyo, Kanagawa, Saitama, Chiba",
+     "regions": [
+      "Tokyo",
+      "Kanagawa Prefecture",
+      "Saitama Prefecture",
+      "Chiba Prefecture"
+     ]
+    },
+    {
+     "label": "Mt. Fuji",
+     "text": "on the border of Shizuoka and Yamanashi",
+     "regions": [
+      "Shizuoka Prefecture",
+      "Yamanashi Prefecture"
+     ]
+    },
+    {
+     "label": "Landlocked (8)",
+     "text": "Tochigi, Gunma, Saitama, Yamanashi, Nagano, Gifu, Shiga, Nara",
+     "regions": [
+      "Tochigi Prefecture",
+      "Gunma Prefecture",
+      "Saitama Prefecture",
+      "Yamanashi Prefecture",
+      "Nagano Prefecture",
+      "Gifu Prefecture",
+      "Shiga Prefecture",
+      "Nara Prefecture"
+     ]
+    }
+   ]
+  }
+ ]
+}

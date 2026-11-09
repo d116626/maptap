@@ -1,0 +1,283 @@
+{
+ "country_code": "BRA",
+ "title": "Brazil tips",
+ "sections": [
+  {
+   "id": "regions",
+   "title": "5 regions",
+   "items": [
+    {
+     "label": "Norte",
+     "text": "Acre, Amapá, Amazonas, Pará, Rondônia, Roraima, Tocantins",
+     "regions": [
+      "Acre",
+      "Amapá",
+      "Amazonas",
+      "Pará",
+      "Rondônia",
+      "Roraima",
+      "Tocantins"
+     ]
+    },
+    {
+     "label": "Nordeste",
+     "text": "Alagoas, Bahia, Ceará, Maranhão, Paraíba, Pernambuco, Piauí, Rio Grande do Norte, Sergipe",
+     "regions": [
+      "Alagoas",
+      "Bahia",
+      "Ceará",
+      "Maranhão",
+      "Paraíba",
+      "Pernambuco",
+      "Piauí",
+      "Rio Grande do Norte",
+      "Sergipe"
+     ]
+    },
+    {
+     "label": "Centro-Oeste",
+     "text": "Goiás, Mato Grosso, Mato Grosso do Sul, Distrito Federal",
+     "regions": [
+      "Goiás",
+      "Mato Grosso",
+      "Mato Grosso do Sul",
+      "Distrito Federal"
+     ]
+    },
+    {
+     "label": "Sudeste",
+     "text": "Espírito Santo, Minas Gerais, Rio de Janeiro, São Paulo",
+     "regions": [
+      "Espírito Santo",
+      "Minas Gerais",
+      "Rio de Janeiro",
+      "São Paulo"
+     ]
+    },
+    {
+     "label": "Sul",
+     "text": "Paraná, Rio Grande do Sul, Santa Catarina",
+     "regions": [
+      "Paraná",
+      "Rio Grande do Sul",
+      "Santa Catarina"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "confusable",
+   "title": "Easy to confuse",
+   "items": [
+    {
+     "label": "Pará / Paraná / Paraíba",
+     "text": "north (Amazon mouth) / south / Northeast coast",
+     "regions": [
+      "Pará",
+      "Paraná",
+      "Paraíba"
+     ]
+    },
+    {
+     "label": "Rio Grande do Norte / do Sul",
+     "text": "northeast tip / far south",
+     "regions": [
+      "Rio Grande do Norte",
+      "Rio Grande do Sul"
+     ]
+    },
+    {
+     "label": "Mato Grosso / Mato Grosso do Sul",
+     "text": "north / south (the south split off)",
+     "regions": [
+      "Mato Grosso",
+      "Mato Grosso do Sul"
+     ]
+    },
+    {
+     "label": "Rondônia / Roraima",
+     "text": "southwest, by Bolivia / far north, by Venezuela",
+     "regions": [
+      "Rondônia",
+      "Roraima"
+     ]
+    },
+    {
+     "label": "Amazonas / Amapá / Acre",
+     "text": "largest / north, by French Guiana / far west",
+     "regions": [
+      "Amazonas",
+      "Amapá",
+      "Acre"
+     ]
+    },
+    {
+     "label": "Espírito Santo",
+     "text": "between Bahia and Rio de Janeiro",
+     "regions": [
+      "Espírito Santo"
+     ]
+    },
+    {
+     "label": "Distrito Federal",
+     "text": "Brasília, enclave inside Goiás",
+     "regions": [
+      "Distrito Federal",
+      "Goiás"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "extremes",
+   "title": "Extremes",
+   "items": [
+    {
+     "label": "Amazonas",
+     "text": "largest state",
+     "regions": [
+      "Amazonas"
+     ]
+    },
+    {
+     "label": "Sergipe",
+     "text": "smallest state",
+     "regions": [
+      "Sergipe"
+     ]
+    },
+    {
+     "label": "Roraima",
+     "text": "northernmost",
+     "regions": [
+      "Roraima"
+     ]
+    },
+    {
+     "label": "Rio Grande do Sul",
+     "text": "southernmost",
+     "regions": [
+      "Rio Grande do Sul"
+     ]
+    },
+    {
+     "label": "Acre",
+     "text": "westernmost",
+     "regions": [
+      "Acre"
+     ]
+    },
+    {
+     "label": "Paraíba",
+     "text": "easternmost",
+     "regions": [
+      "Paraíba"
+     ]
+    },
+    {
+     "label": "Equator",
+     "text": "crosses Amapá, Pará, Amazonas, Roraima",
+     "regions": [
+      "Amapá",
+      "Pará",
+      "Amazonas",
+      "Roraima"
+     ]
+    },
+    {
+     "label": "Tocantins",
+     "text": "youngest state (1988)",
+     "regions": [
+      "Tocantins"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "coast",
+   "title": "Coast",
+   "items": [
+    {
+     "label": "Coastal states",
+     "text": "Amapá, Pará, Maranhão, Piauí, Ceará, Rio Grande do Norte, Paraíba, Pernambuco, Alagoas, Sergipe, Bahia, Espírito Santo, Rio de Janeiro, São Paulo, Paraná, Santa Catarina, Rio Grande do Sul",
+     "regions": [
+      "Amapá",
+      "Pará",
+      "Maranhão",
+      "Piauí",
+      "Ceará",
+      "Rio Grande do Norte",
+      "Paraíba",
+      "Pernambuco",
+      "Alagoas",
+      "Sergipe",
+      "Bahia",
+      "Espírito Santo",
+      "Rio de Janeiro",
+      "São Paulo",
+      "Paraná",
+      "Santa Catarina",
+      "Rio Grande do Sul"
+     ]
+    },
+    {
+     "label": "No coast",
+     "text": "Acre, Amazonas, Rondônia, Roraima, Tocantins, Goiás, Mato Grosso, Mato Grosso do Sul, Distrito Federal, Minas Gerais",
+     "regions": [
+      "Acre",
+      "Amazonas",
+      "Rondônia",
+      "Roraima",
+      "Tocantins",
+      "Goiás",
+      "Mato Grosso",
+      "Mato Grosso do Sul",
+      "Distrito Federal",
+      "Minas Gerais"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "origins",
+   "title": "Name origins",
+   "items": [
+    {
+     "label": "Minas Gerais",
+     "text": "\"general mines\"",
+     "regions": [
+      "Minas Gerais"
+     ]
+    },
+    {
+     "label": "Mato Grosso",
+     "text": "\"thick forest\"",
+     "regions": [
+      "Mato Grosso"
+     ]
+    },
+    {
+     "label": "Espírito Santo",
+     "text": "\"Holy Spirit\"",
+     "regions": [
+      "Espírito Santo"
+     ]
+    },
+    {
+     "label": "Rio de Janeiro",
+     "text": "\"January river\"",
+     "regions": [
+      "Rio de Janeiro"
+     ]
+    },
+    {
+     "label": "Santa Catarina",
+     "text": "named after St. Catherine",
+     "regions": [
+      "Santa Catarina"
+     ]
+    }
+   ]
+  }
+ ]
+}

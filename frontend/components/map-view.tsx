@@ -34,6 +34,7 @@ import {
 } from "@/lib/geo-utils";
 import {
   TIPS_SHEET_BOTTOM_PX,
+  matchesTipRegion,
   tipsSheetHeightPx,
   type TipsSnap,
 } from "@/lib/tips";
@@ -660,7 +661,7 @@ export function MapView() {
       features: statesGeoJSON.features.filter(
         (f) =>
           f.properties?.country_code === settings.scopeCountry &&
-          names.has(f.properties?.name)
+          matchesTipRegion(f.properties, names)
       ),
     };
   }, [isTipsOpen, tipsHighlight, statesGeoJSON, settings.scopeCountry]);
@@ -676,7 +677,7 @@ export function MapView() {
         statesGeoJSON.features.filter(
           (f) =>
             f.properties?.country_code === country &&
-            names.has(f.properties?.name)
+            matchesTipRegion(f.properties, names)
         )
       );
       if (!bounds) return;

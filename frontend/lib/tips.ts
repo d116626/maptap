@@ -17,7 +17,20 @@ export function tipsSheetHeightPx(snap: TipsSnap): number {
   return snap === "peek" ? PEEK_PX : window.innerHeight * SNAP_VH[snap];
 }
 
-export const COUNTRIES_WITH_TIPS = new Set<string>(["CHN"]);
+export const COUNTRIES_WITH_TIPS = new Set<string>(["CHN", "BRA", "USA", "JPN"]);
+
+// A tip region is a regions.geojson `name`, or "@CODE" to match a `state_code`
+// (needed when names repeat, e.g. Washington state vs Washington D.C.)
+export function matchesTipRegion(
+  props: { name?: string; state_code?: string } | null | undefined,
+  regions: Set<string>
+): boolean {
+  if (!props) return false;
+  return (
+    (props.name !== undefined && regions.has(props.name)) ||
+    (props.state_code !== undefined && regions.has(`@${props.state_code}`))
+  );
+}
 
 const cache = new Map<string, CountryTips>();
 
