@@ -29,11 +29,18 @@ import {
   calculateScore,
   createLineStringGeoJSON,
   filterCitiesByScope,
+  getFeaturesBounds,
   isPointInsideGeometry,
 } from "@/lib/geo-utils";
+import {
+  TIPS_SHEET_BOTTOM_PX,
+  tipsSheetHeightPx,
+  type TipsSnap,
+} from "@/lib/tips";
 import { soundEffects } from "@/lib/sound-effects";
 import { buildUnifiedMapLibreStyle } from "@/lib/unified-map-style";
 import { UnifiedGamePanel } from "./unified-game-panel";
+import { CountryTipsPanel } from "./country-tips-panel";
 import { BottomControlsDock } from "./bottom-controls-dock";
 import { CitiesCatalogDialog } from "./cities-catalog-dialog";
 import { TrophyDashboardDialog } from "./trophy-dashboard-dialog";
@@ -331,6 +338,12 @@ export function MapView() {
   const [dashboardOpen, setDashboardOpen] = useState(false);
   const [streak, setStreak] = useState<number>(0);
   const [catalogOpen, setCatalogOpen] = useState(false);
+  const [tipsOpenFor, setTipsOpenFor] = useState<string | null>(null);
+  const [tipsSnap, setTipsSnap] = useState<TipsSnap>("half");
+  const [tipsHighlight, setTipsHighlight] = useState<{
+    country: string;
+    regions: string[];
+  } | null>(null);
 
   // Calculate average score across all played rounds
   const averageScore = useMemo(() => {
@@ -633,6 +646,63 @@ export function MapView() {
     },
     [statesGeoJSON, countriesGeoJSON]
   );
+
+  // Tips panel is only shown for the country it was opened on; switching scope hides it
+  const isTipsOpen = tipsOpenFor !== null && tipsOpenFor === settings.scopeCountry;
+
+  const tipsHighlightGeoJSON = useMemo<FeatureCollection | null>(() => {
+    if (!isTipsOpen || !statesGeoJSON) return null;
+    if (!tipsHighlight || tipsHighlight.country !== settings.scopeCountry) return null;
+    if (tipsHighlight.regions.length === 0) return null;
+    const names = new Set(tipsHighlight.regions);
+    return {
+      type: "FeatureCollection",
+      features: statesGeoJSON.features.filter(
+        (f) =>
+          f.properties?.country_code === settings.scopeCountry &&
+          names.has(f.properties?.name)
+      ),
+    };
+  }, [isTipsOpen, tipsHighlight, statesGeoJSON, settings.scopeCountry]);
+
+  const handleTipsHighlight = useCallback(
+    (regions: string[]) => {
+      const country = settings.scopeCountry;
+      setTipsHighlight({ country, regions });
+      const map = mapRef.current;
+      if (!map || regions.length === 0 || !statesGeoJSON) return;
+      const names = new Set(regions);
+      const bounds = getFeaturesBounds(
+        statesGeoJSON.features.filter(
+          (f) =>
+            f.properties?.country_code === country &&
+            names.has(f.properties?.name)
+        )
+      );
+      if (!bounds) return;
+      const height = map.getMap().getContainer().clientHeight;
+      const covered = TIPS_SHEET_BOTTOM_PX + tipsSheetHeightPx(tipsSnap) + 16;
+      const top = Math.min(175, height * 0.35);
+      map.fitBounds(bounds, {
+        padding: {
+          top,
+          bottom: Math.min(covered, height - top - 80),
+          left: 24,
+          right: 24,
+        },
+        maxZoom: 7,
+        duration: 700,
+      });
+    },
+    [settings.scopeCountry, statesGeoJSON, tipsSnap]
+  );
+
+  const handleToggleTips = useCallback(() => {
+    setTipsOpenFor((current) =>
+      current === settings.scopeCountry ? null : settings.scopeCountry
+    );
+    setTipsHighlight(null);
+  }, [settings.scopeCountry]);
 
   // GeoJSON features for Highlighting Target Region (Green)
   const targetRegionGeoJSON = useMemo<FeatureCollection | null>(() => {
@@ -984,9 +1054,23 @@ export function MapView() {
         onFlyToRegion={handleFlyToRegion}
         onOpenCatalog={() => setCatalogOpen(true)}
         onOpenStats={() => setDashboardOpen(true)}
+        tipsOpen={isTipsOpen}
+        onToggleTips={handleToggleTips}
       />
 
+      {isTipsOpen && (
+        <CountryTipsPanel
+          key={settings.scopeCountry}
+          countryCode={settings.scopeCountry}
+          snap={tipsSnap}
+          onSnapChange={setTipsSnap}
+          onHighlight={handleTipsHighlight}
+          onClose={handleToggleTips}
+        />
+      )}
+
       {/* Main MapLibre Canvas (Native 60+ FPS via initialViewState) */}
+      <div className="absolute inset-0">
       <Map
         ref={mapRef}
         initialViewState={initialViewState}
@@ -1096,6 +1180,28 @@ export function MapView() {
                 "text-color": "#e0f2fe",
                 "text-halo-color": "#0c4a6e",
                 "text-halo-width": 2,
+              }}
+            />
+          </Source>
+        )}
+
+        {tipsHighlightGeoJSON && (
+          <Source id="tips-highlight-source" type="geojson" data={tipsHighlightGeoJSON}>
+            <Layer
+              id="tips-highlight-fill"
+              type="fill"
+              paint={{
+                "fill-color": "#f59e0b",
+                "fill-opacity": 0.35,
+              }}
+            />
+            <Layer
+              id="tips-highlight-line"
+              type="line"
+              paint={{
+                "line-color": "#fbbf24",
+                "line-width": 2.2,
+                "line-opacity": 0.95,
               }}
             />
           </Source>
@@ -1216,6 +1322,7 @@ export function MapView() {
           </Marker>
         )}
       </Map>
+      </div>
 
       {/* Modern Floating Bottom Controls Dock (Tamanho Rigorosamente Fixo) */}
       <BottomControlsDock

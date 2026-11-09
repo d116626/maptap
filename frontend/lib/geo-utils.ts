@@ -51,7 +51,7 @@ export function calculateScore(
   return Math.max(0, Math.min(1000, Math.round(1000 * normalized)));
 }
 
-import type { Geometry } from "geojson";
+import type { Feature, Geometry } from "geojson";
 import type { CityItem } from "@/types/map";
 import { REGION_TABS } from "@/data/countries-catalog";
 
@@ -246,4 +246,36 @@ export function calculateFeatureCenter(geometry: Geometry): [number, number] {
 
   if (minLng === Infinity) return [0, 0];
   return [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
+}
+
+export function getFeaturesBounds(
+  features: Feature[]
+): [[number, number], [number, number]] | null {
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+
+  const visit = (coords: unknown) => {
+    if (!Array.isArray(coords)) return;
+    if (typeof coords[0] === "number") {
+      const [lng, lat] = coords as number[];
+      if (lng < west) west = lng;
+      if (lng > east) east = lng;
+      if (lat < south) south = lat;
+      if (lat > north) north = lat;
+      return;
+    }
+    for (const c of coords) visit(c);
+  };
+
+  for (const f of features) {
+    if (f.geometry && "coordinates" in f.geometry) visit(f.geometry.coordinates);
+  }
+
+  if (!Number.isFinite(west)) return null;
+  return [
+    [west, south],
+    [east, north],
+  ];
 }

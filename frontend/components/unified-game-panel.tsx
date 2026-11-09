@@ -6,10 +6,12 @@ import type { FeatureCollection } from "geojson";
 import { RegionSelector } from "./region-select-dialog";
 import { CityPoolSelector } from "./city-pool-selector";
 import { Button } from "@/components/ui/button";
+import { COUNTRIES_WITH_TIPS } from "@/lib/tips";
 import {
   CheckCircle2,
   Crosshair,
   Flame,
+  Lightbulb,
   MapPin,
   Map as MapIcon,
   Navigation,
@@ -31,6 +33,8 @@ interface UnifiedGamePanelProps {
   onFlyToRegion?: (center: [number, number], zoom: number) => void;
   onOpenCatalog: () => void;
   onOpenStats?: () => void;
+  tipsOpen?: boolean;
+  onToggleTips?: () => void;
 }
 
 export function UnifiedGamePanel({
@@ -45,8 +49,11 @@ export function UnifiedGamePanel({
   onFlyToRegion,
   onOpenCatalog,
   onOpenStats,
+  tipsOpen = false,
+  onToggleTips,
 }: UnifiedGamePanelProps) {
   const isCitiesMode = settings.mode === "cities";
+  const hasTips = COUNTRIES_WITH_TIPS.has(settings.scopeCountry);
 
   const clickedLocationText = useMemo(() => {
     if (!guessResult || !guessResult.clickedRegionName) return "Outside area";
@@ -178,7 +185,24 @@ export function UnifiedGamePanel({
         </div>
 
         {/* 2. Target Display: City • Region • Country & Metadata */}
-        <div className="py-0.5 text-center px-1">
+        <div
+          className={`relative py-0.5 text-center ${hasTips && onToggleTips ? "px-9" : "px-1"}`}
+        >
+          {hasTips && onToggleTips && (
+            <Button
+              variant={tipsOpen ? "default" : "ghost"}
+              size="sm"
+              onClick={onToggleTips}
+              className={`absolute right-0 top-1/2 size-8 -translate-y-1/2 rounded-xl p-0 ${
+                tipsOpen
+                  ? "bg-amber-500 text-slate-950 hover:bg-amber-400"
+                  : "text-amber-400 hover:text-amber-300"
+              }`}
+              title="Study tips for this country"
+            >
+              <Lightbulb className="size-4" />
+            </Button>
+          )}
           <h2 className="text-base sm:text-lg font-black tracking-tight text-foreground leading-snug break-words">
             {target.displayName}
           </h2>

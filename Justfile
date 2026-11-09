@@ -22,3 +22,7 @@ typecheck:
 # Executa linter no frontend
 lint:
     cd frontend && npm run lint
+
+# Valida se os nomes de regiões das dicas existem em regions.geojson
+validate-tips:
+    uv run python -m utils.validate_tips

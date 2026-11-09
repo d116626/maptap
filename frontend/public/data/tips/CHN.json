@@ -1,0 +1,454 @@
+{
+ "country_code": "CHN",
+ "title": "China tips",
+ "summary": "Tap an item to highlight it on the map.",
+ "sections": [
+  {
+   "id": "name-parts",
+   "title": "Name parts",
+   "items": [
+    {
+     "label": "北 bei = north",
+     "text": "Hebei, Hubei",
+     "regions": [
+      "Hebei",
+      "Hubei"
+     ]
+    },
+    {
+     "label": "南 nan = south",
+     "text": "Henan, Hunan, Hainan, Yunnan",
+     "regions": [
+      "Henan",
+      "Hunan",
+      "Hainan",
+      "Yunnan"
+     ]
+    },
+    {
+     "label": "东 dong = east",
+     "text": "Shandong, Guangdong",
+     "regions": [
+      "Shandong",
+      "Guangdong"
+     ]
+    },
+    {
+     "label": "西 xi = west",
+     "text": "Shanxi, Shaanxi, Guangxi, Jiangxi",
+     "regions": [
+      "Shanxi",
+      "Shaanxi",
+      "Guangxi",
+      "Jiangxi"
+     ]
+    },
+    {
+     "label": "河 he = river",
+     "text": "Hebei, Henan (Yellow River)",
+     "regions": [
+      "Hebei",
+      "Henan"
+     ]
+    },
+    {
+     "label": "湖 hu = lake",
+     "text": "Hubei, Hunan (Dongting Lake)",
+     "regions": [
+      "Hubei",
+      "Hunan"
+     ]
+    },
+    {
+     "label": "山 shan = mountain",
+     "text": "Shandong, Shanxi (Taihang Mts.)",
+     "regions": [
+      "Shandong",
+      "Shanxi"
+     ]
+    },
+    {
+     "label": "江 jiang = river",
+     "text": "Heilongjiang, Zhejiang, Jiangsu, Jiangxi",
+     "regions": [
+      "Heilongjiang",
+      "Zhejiang",
+      "Jiangsu",
+      "Jiangxi"
+     ]
+    },
+    {
+     "label": "海 hai = sea",
+     "text": "Hainan, Qinghai",
+     "regions": [
+      "Hainan",
+      "Qinghai"
+     ]
+    },
+    {
+     "label": "川 chuan = river",
+     "text": "Sichuan (\"four rivers\")",
+     "regions": [
+      "Sichuan"
+     ]
+    },
+    {
+     "label": "Xinjiang",
+     "text": "Its jiang (疆) means \"frontier\", not river.",
+     "regions": [
+      "Xinjiang"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "confusable",
+   "title": "Easy to confuse",
+   "items": [
+    {
+     "label": "Hebei / Henan",
+     "text": "north (around Beijing) / south",
+     "regions": [
+      "Hebei",
+      "Henan"
+     ]
+    },
+    {
+     "label": "Hubei / Hunan",
+     "text": "north / south of the lake",
+     "regions": [
+      "Hubei",
+      "Hunan"
+     ]
+    },
+    {
+     "label": "Shanxi / Shaanxi",
+     "text": "east / west of the Yellow River",
+     "regions": [
+      "Shanxi",
+      "Shaanxi"
+     ]
+    },
+    {
+     "label": "Shandong",
+     "text": "the coastal peninsula, not Shanxi or Shaanxi",
+     "regions": [
+      "Shandong"
+     ]
+    },
+    {
+     "label": "Jiangsu / Zhejiang / Jiangxi",
+     "text": "north of Shanghai / south of it / inland",
+     "regions": [
+      "Jiangsu",
+      "Zhejiang",
+      "Jiangxi",
+      "Shanghai"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "traditional-regions",
+   "title": "7 regions",
+   "items": [
+    {
+     "label": "North (Huabei)",
+     "text": "Beijing, Tianjin, Hebei, Shanxi, Inner Mongolia",
+     "regions": [
+      "Beijing",
+      "Tianjin",
+      "Hebei",
+      "Shanxi",
+      "Inner Mongolia"
+     ]
+    },
+    {
+     "label": "Northeast (Dongbei)",
+     "text": "Liaoning, Jilin, Heilongjiang",
+     "regions": [
+      "Liaoning",
+      "Jilin",
+      "Heilongjiang"
+     ]
+    },
+    {
+     "label": "East (Huadong)",
+     "text": "Shanghai, Jiangsu, Zhejiang, Anhui, Fujian, Jiangxi, Shandong",
+     "regions": [
+      "Shanghai",
+      "Jiangsu",
+      "Zhejiang",
+      "Anhui",
+      "Fujian",
+      "Jiangxi",
+      "Shandong"
+     ]
+    },
+    {
+     "label": "Central (Huazhong)",
+     "text": "Henan, Hubei, Hunan",
+     "regions": [
+      "Henan",
+      "Hubei",
+      "Hunan"
+     ]
+    },
+    {
+     "label": "South (Huanan)",
+     "text": "Guangdong, Guangxi, Hainan",
+     "regions": [
+      "Guangdong",
+      "Guangxi",
+      "Hainan"
+     ]
+    },
+    {
+     "label": "Southwest (Xinan)",
+     "text": "Chongqing, Sichuan, Guizhou, Yunnan, Tibet",
+     "regions": [
+      "Chongqing",
+      "Sichuan",
+      "Guizhou",
+      "Yunnan",
+      "Tibet"
+     ]
+    },
+    {
+     "label": "Northwest (Xibei)",
+     "text": "Shaanxi, Gansu, Qinghai, Ningxia, Xinjiang",
+     "regions": [
+      "Shaanxi",
+      "Gansu",
+      "Qinghai",
+      "Ningxia",
+      "Xinjiang"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "structure",
+   "title": "Structure (31)",
+   "items": [
+    {
+     "label": "4 municipalities",
+     "text": "Beijing, Tianjin, Shanghai, Chongqing",
+     "regions": [
+      "Beijing",
+      "Tianjin",
+      "Shanghai",
+      "Chongqing"
+     ]
+    },
+    {
+     "label": "5 autonomous regions",
+     "text": "Inner Mongolia, Guangxi, Tibet, Ningxia, Xinjiang",
+     "regions": [
+      "Inner Mongolia",
+      "Guangxi",
+      "Tibet",
+      "Ningxia",
+      "Xinjiang"
+     ]
+    },
+    {
+     "label": "22 provinces",
+     "text": "everything else",
+     "regions": [
+      "Hebei",
+      "Shanxi",
+      "Liaoning",
+      "Jilin",
+      "Heilongjiang",
+      "Jiangsu",
+      "Zhejiang",
+      "Anhui",
+      "Fujian",
+      "Jiangxi",
+      "Shandong",
+      "Henan",
+      "Hubei",
+      "Hunan",
+      "Guangdong",
+      "Hainan",
+      "Sichuan",
+      "Guizhou",
+      "Yunnan",
+      "Shaanxi",
+      "Gansu",
+      "Qinghai"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rivers-and-coast",
+   "title": "Rivers and coast",
+   "items": [
+    {
+     "label": "Yellow River (9)",
+     "text": "Qinghai to Shandong",
+     "regions": [
+      "Qinghai",
+      "Sichuan",
+      "Gansu",
+      "Ningxia",
+      "Inner Mongolia",
+      "Shaanxi",
+      "Shanxi",
+      "Henan",
+      "Shandong"
+     ]
+    },
+    {
+     "label": "Yangtze (11)",
+     "text": "Qinghai to Shanghai",
+     "regions": [
+      "Qinghai",
+      "Tibet",
+      "Sichuan",
+      "Yunnan",
+      "Chongqing",
+      "Hubei",
+      "Hunan",
+      "Jiangxi",
+      "Anhui",
+      "Jiangsu",
+      "Shanghai"
+     ]
+    },
+    {
+     "label": "Coast (11)",
+     "text": "Liaoning to Hainan",
+     "regions": [
+      "Liaoning",
+      "Hebei",
+      "Tianjin",
+      "Shandong",
+      "Jiangsu",
+      "Shanghai",
+      "Zhejiang",
+      "Fujian",
+      "Guangdong",
+      "Guangxi",
+      "Hainan"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "origins",
+   "title": "Name origins",
+   "items": [
+    {
+     "label": "Jiangsu",
+     "text": "Jiangning (Nanjing) + Suzhou",
+     "regions": [
+      "Jiangsu"
+     ]
+    },
+    {
+     "label": "Anhui",
+     "text": "Anqing + Huizhou",
+     "regions": [
+      "Anhui"
+     ]
+    },
+    {
+     "label": "Fujian",
+     "text": "Fuzhou + Jianzhou",
+     "regions": [
+      "Fujian"
+     ]
+    },
+    {
+     "label": "Gansu",
+     "text": "Ganzhou + Suzhou",
+     "regions": [
+      "Gansu"
+     ]
+    },
+    {
+     "label": "Heilongjiang",
+     "text": "\"Black Dragon River\" (Amur)",
+     "regions": [
+      "Heilongjiang"
+     ]
+    },
+    {
+     "label": "Qinghai",
+     "text": "\"blue sea\", Qinghai Lake",
+     "regions": [
+      "Qinghai"
+     ]
+    },
+    {
+     "label": "Yunnan",
+     "text": "\"south of the clouds\"",
+     "regions": [
+      "Yunnan"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "anchors",
+   "title": "Visual anchors",
+   "items": [
+    {
+     "label": "Hainan",
+     "text": "the only island province",
+     "regions": [
+      "Hainan"
+     ]
+    },
+    {
+     "label": "Xinjiang",
+     "text": "about 1/6 of China, far west",
+     "regions": [
+      "Xinjiang"
+     ]
+    },
+    {
+     "label": "Heilongjiang",
+     "text": "northernmost and easternmost",
+     "regions": [
+      "Heilongjiang"
+     ]
+    },
+    {
+     "label": "Ningxia",
+     "text": "smallest autonomous region",
+     "regions": [
+      "Ningxia"
+     ]
+    },
+    {
+     "label": "Beijing, Tianjin",
+     "text": "inside Hebei",
+     "regions": [
+      "Beijing",
+      "Tianjin",
+      "Hebei"
+     ]
+    },
+    {
+     "label": "Shanghai",
+     "text": "at the Yangtze mouth",
+     "regions": [
+      "Shanghai"
+     ]
+    },
+    {
+     "label": "Chongqing",
+     "text": "split from Sichuan in 1997",
+     "regions": [
+      "Chongqing",
+      "Sichuan"
+     ]
+    }
+   ]
+  }
+ ]
+}
