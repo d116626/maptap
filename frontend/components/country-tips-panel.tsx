@@ -152,7 +152,7 @@ export function CountryTipsPanel({
   return (
     <div
       ref={sheetRef}
-      className={`absolute inset-x-2 bottom-19 z-20 flex h-(--sheet-h) flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur-2xl mx-auto max-w-xl ${
+      className={`fixed inset-x-2 bottom-19 z-20 flex h-(--sheet-h) flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 shadow-2xl backdrop-blur-2xl mx-auto max-w-xl ${
         dragHeight === null ? "transition-[height] duration-200" : ""
       }`}
       style={{ "--sheet-h": sheetHeight } as React.CSSProperties}
